@@ -69,6 +69,19 @@ Pick these heroes on character select. Each has a meter on the HUD.
 
 The Scene view draws live hurtboxes (blue), hitboxes (red), debris, and destructible health (`SimDebugDraw`).
 
+## Automatic builds (GitHub Actions)
+
+`.github/workflows/unity-build.yml` runs on every push to `main`, and from the Actions tab via **Run workflow**:
+1. It runs the simulation tests with .NET.
+2. It builds **WebGL, Windows and Linux** players with [GameCI](https://game.ci). `CIBuild.Build` generates the graybox scene and switches on the Input System, then builds.
+3. It uploads each player as a run artifact (download it from the run page, kept for 14 days) and publishes the WebGL build to **GitHub Pages**.
+
+Setup:
+- Add the repository secrets `UNITY_LICENSE` (the contents of your `.ulf` license file), `UNITY_EMAIL` and `UNITY_PASSWORD`.
+- Under **Settings → Pages**, set **Source: GitHub Actions**.
+
+The first run takes longest, because it downloads the Unity image and imports everything. Later runs reuse the cached `Library`.
+
 ## Browser playtest (no Unity needed)
 
 `Tools/WebPlayable` compiles the same simulation (`Scripts/Sim`) to WebAssembly and draws it with a small canvas renderer.

@@ -1,0 +1,98 @@
+# Builds the Unity project on every push to main (and on demand):
+#   1. Runs the simulation test suite with plain .NET (fast, no Unity license needed).
+#   2. Builds Windows, Linux and WebGL players with GameCI; each is downloadable from the run's
+#      Artifacts section.
+#   3. Publishes the WebGL build to GitHub Pages (Settings > Pages > Source: GitHub Actions).
+#
+# Repository secrets (Settings > Secrets and variables > Actions):
+#   UNITY_LICENSE   contents of your Unity_lic.ulf (Personal works)
+#   UNITY_EMAIL     Unity account email
+#   UNITY_PASSWORD  Unity account password
+name: Unity Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unity-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sim-tests:
+    name: Simulation tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test Tools/SimTests --logger "console;verbosity=normal"
+
+  build:
+    name: Build ${{ matrix.targetPlatform }}
+    needs: sim-tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform: [WebGL, StandaloneWindows64, StandaloneLinux64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space for the Unity image
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          large-packages: false
+
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt', 'Assets/**/*.cs') }}
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}-
+
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          unityVersion: auto
+          buildName: AvengersReforged
+          buildMethod: Reforged.EditorTools.CIBuild.Build
+          allowDirtyBuild: true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AvengersReforged-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          retention-days: 14
+
+      - if: matrix.targetPlatform == 'WebGL'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/WebGL/AvengersReforged
+
+  pages:
+    name: Publish WebGL to GitHub Pages
+    needs: build
+    if: github.ref == 'refs/heads/main' && !cancelled() && needs.build.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

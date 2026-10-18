@@ -17,7 +17,7 @@ namespace Reforged.EditorTools
     {
         const string Root = "Assets/_Project";
         const string ControlsPath = Root + "/Input/ReforgedControls.inputactions";
-        const string ScenePath = Root + "/Scenes/GrayboxTestRoom.unity";
+        public const string ScenePath = Root + "/Scenes/GrayboxTestRoom.unity";
         const string PropRoot = Root + "/Art/Props/";
         const string LibraryPath = Root + "/Content/ContentLibrary.asset";
 
@@ -25,6 +25,12 @@ namespace Reforged.EditorTools
         public static void Build()
         {
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            BuildScene();
+        }
+
+        /// <summary>Generates the scene without prompting; used by the menu and by CIBuild.</summary>
+        public static void BuildScene()
+        {
             EnsureFolder(Root, "Prefabs");
             EnsureFolder(Root, "Scenes");
             EnsureFolder(Root, "Materials");
