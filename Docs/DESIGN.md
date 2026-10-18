@@ -37,7 +37,7 @@ The 90s arcade cabinet you remember, rebuilt the way you *thought* it looked: co
 | # | Hero | Archetype | Unique Mechanic |
 |---|---|---|---|
 | 1 | **Captain America** | All-rounder / setups | **Shield Ricochet**: the shield bounces between enemies, and catching it on the return refunds gauge and cancels recovery. D-pad sets the throw angle and charges extra ricochets |
-| 2 | **Iron Man** | Zoner / air | **Heat Gauge**: repulsors build heat, venting is an AoE, and overheating grounds him. Two air jumps |
+| 2 | **Iron Man** | Zoner / air | **Heat Gauge**: repulsors and beams build heat. Hold Jump in the air to hover (builds heat). D-pad ↓ vents 300+ heat as an area blast. Overheating locks out heat moves, hover and air jumps for 2s. D-pad ←/→ aims repulsors |
 | 3 | **Thor** | Heavy / AoE | **Mjölnir Recall**: throw, then recall through enemies. Storm Charge powers up the next special |
 | 4 | **Hulk** | Grappler / armor | **Rage tiers** (Hulk → Savage → World Breaker): more armor and new throws |
 | 5 | **Black Widow** | Rushdown / technical | **Widow's Bite Marks** for electric bonus damage. Grapple-line swings between lanes and levels |
@@ -355,7 +355,7 @@ CameraDirector (Cinemachine target group)                              └ SaveS
 | Phase | Duration | Deliverable | Status |
 |---|---|---|---|
 | Pre-production | 3 mo | Deterministic combat core, rollback, tools, graybox, art pipeline | **Done** (see README) |
-| Vertical Slice | 4 mo | Cap + Iron Man, 1 multi-level stage with destruction, 2P local | In progress: graybox playable, character select, Cap proxy animated, toon shader |
+| Vertical Slice | 4 mo | Cap + Iron Man, 1 multi-level stage with destruction, 2P local | In progress: graybox playable, character select, Cap + Iron Man proxies animated, toon shader, all four hero mechanics (Heat, Rage, Density, Size) with graybox Hulk/Vision/Ant-Man |
 | Production A | 8 mo | 6 heroes, 5 stages, 4P local, online rollback | — |
 | Production B | 7 mo | All 10 heroes, both Ultimates each, modes, team-ups | — |
 | Polish/Cert | 6 mo | Balance, accessibility, performance, certification | — |

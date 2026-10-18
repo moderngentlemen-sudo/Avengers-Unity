@@ -23,6 +23,10 @@ namespace Reforged.Game
         [Tooltip("Assist Callout moves: LT = [0], LT+forward = [1], LT+down = [2].")]
         public string[] assistMoves = new string[0];
         public int toolCycleRange, toolChargeCost;
+        [Tooltip("Heat (Iron Man), Rage (Hulk), Density (Vision), Size (Ant-Man).")]
+        public HeroMechanic mechanic;
+        [Tooltip("Moves fired by D-pad left/right (e.g. Hulk's claps). Leave empty if unused.")]
+        public string toolLeftMove, toolRightMove;
         public List<MoveEntry> moves = new List<MoveEntry>();
 
         [Header("Presentation")]
@@ -50,6 +54,9 @@ namespace Reforged.Game
                 AssistMoves = (string[])assistMoves.Clone(),
                 ToolCycleRange = toolCycleRange,
                 ToolChargeCost = toolChargeCost,
+                Mechanic = mechanic,
+                ToolLeftMove = string.IsNullOrEmpty(toolLeftMove) ? null : toolLeftMove,
+                ToolRightMove = string.IsNullOrEmpty(toolRightMove) ? null : toolRightMove,
             };
             foreach (var m in moves) h.Add(m.ToDef());
             return h;
@@ -70,6 +77,9 @@ namespace Reforged.Game
             assistMoves = (string[])h.AssistMoves.Clone();
             toolCycleRange = h.ToolCycleRange;
             toolChargeCost = h.ToolChargeCost;
+            mechanic = h.Mechanic;
+            toolLeftMove = h.ToolLeftMove;
+            toolRightMove = h.ToolRightMove;
             moves.Clear();
             foreach (var m in h.Moves) moves.Add(MoveEntry.From(m));
         }
@@ -104,6 +114,11 @@ namespace Reforged.Game
         public int teamBuffFrames;
         public string chainNext;
         public MoveFlags flags;
+        [Header("Mechanic")]
+        public int heatCost;
+        public int minTier;
+        public MechanicEffect effect;
+        public int effectFrames;
         [Header("Projectile")]
         public bool hasProjectile;
         public float projectileSpeed = 0.4f, projectileRise;
@@ -124,6 +139,7 @@ namespace Reforged.Game
             GaugeCost = gaugeCost, GaugeGain = gaugeGain, DestructionPower = destructionPower, TeamBuffFrames = teamBuffFrames,
             ChainNext = string.IsNullOrEmpty(chainNext) ? null : chainNext,
             Flags = flags,
+            HeatCost = heatCost, MinTier = minTier, Effect = effect, EffectFrames = effectFrames,
             Projectile = !hasProjectile ? null : new ProjectileSpec
             {
                 Speed = SimConvert.ToFix(projectileSpeed), Rise = SimConvert.ToFix(projectileRise),
@@ -146,6 +162,7 @@ namespace Reforged.Game
                 juggleCost = m.JuggleCost, maxHits = m.MaxHits, rehitInterval = m.RehitInterval,
                 gaugeCost = m.GaugeCost, gaugeGain = m.GaugeGain, destructionPower = m.DestructionPower,
                 teamBuffFrames = m.TeamBuffFrames, chainNext = m.ChainNext, flags = m.Flags,
+                heatCost = m.HeatCost, minTier = m.MinTier, effect = m.Effect, effectFrames = m.EffectFrames,
                 hasProjectile = m.Projectile != null,
             };
             if (m.Projectile != null)

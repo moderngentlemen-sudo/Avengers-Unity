@@ -56,6 +56,17 @@ Gamepad bindings follow the control table in the design doc.
 - **Y** on the crate, then **RB** to pick up the debris and **X** to throw it.
 - With full gauge (3 bars), **L3+R3** for Ultimate I and **RT+L3+R3** for Ultimate II.
 
+### Hero mechanics
+
+Pick these heroes on character select. Each has a meter on the HUD.
+
+| Hero | Mechanic | Try |
+|---|---|---|
+| **Iron Man** | **Heat.** Repulsors and beams add heat, which cools after a pause. At max he **overheats** for 2s: no heat moves, no hover, no air jumps. | Hold **A** in the air to hover (it builds heat). With 300+ heat, **D-pad ↓** vents it as an area blast. **D-pad ←/→** aims repulsors low, level, or high. |
+| **Hulk** | **Rage.** Fills from damage dealt and taken. Each tier (Savage, World Breaker) adds +15% damage and armor, and unlocks bigger throws. | **RB** at different rage levels: Gamma Toss, Savage Slam, World Breaker Throw. **D-pad ↓** Gamma Roar spends a tier to stagger everyone nearby. **D-pad →** Thunderclap launches enemies and pops debris up for batting. **RT+L3+R3** Gamma Rage gives 12s of World Breaker. |
+| **Vision** | **Density.** Phase is intangible and passes through walls and floors, but drains energy. Diamond is armored, +25% damage and slow. | **D-pad ↓** Phase, then walk through the drywall, then attack: the **Phase Strike** can't be blocked. **D-pad →** Diamond, then an air **Y** breaks the weak floor. **D-pad ←** returns to solid, which recharges energy. |
+| **Ant-Man** | **Size.** Changing size cancels any move. | **D-pad ↓** shrink: tiny hurtbox, crits straight through the Hydra Heavy's armor. **D-pad →** Giant-Man: double reach, hits every lane, smashes scenery, drains Pym particles. **RT+L3+R3** Quantum Tunnel shrinks every enemy. |
+
 The Scene view draws live hurtboxes (blue), hitboxes (red), debris, and destructible health (`SimDebugDraw`).
 
 ## Art pipeline (Blender)
@@ -65,7 +76,7 @@ Art flows from Blender through validated FBX files, with no manual import settin
 | Step | Command | Output |
 |---|---|---|
 | 1. Export frame data from the sim | `dotnet run --project Tools/FrameData` | `Docs/FrameData/*.json`, `Docs/MoveList.md` |
-| 2. Build a hero proxy (rig, mesh, every animation) | `python Tools/Blender/build_proxy_hero.py captain_america` | `Art/Characters/captain_america/captain_america.fbx`, `ArtSource/Characters/captain_america_proxy.blend` |
+| 2. Build a hero proxy (rig, mesh, every animation) | `python Tools/Blender/build_proxy_hero.py captain_america` (or `iron_man`) | `Art/Characters/<hero>/<hero>.fbx`, `ArtSource/Characters/<hero>_proxy.blend` |
 | 3. Build pre-fractured props | `python Tools/Blender/build_fractured_props.py` | `Art/Props/<prop>_intact.fbx`, `<prop>_fractured.fbx` |
 | Artists: validate and export a real model | `blender -b hero.blend -P Tools/Blender/export_hero.py -- captain_america` | Fails with a list of problems, or writes the FBX |
 
@@ -84,7 +95,10 @@ The validator was checked against a deliberately broken file: it reports a renam
 - `SimAnimationDriver` plays clips as a function of sim state: the clip is the current move, and the time is the sim's `MoveFrame`. Animation can't drift from hitboxes, hitstop freezes it, and rollback re-renders it correctly.
 - The `HeroAsset` inspector warns about any move without a clip, or whose clip length doesn't match its frame data.
 
+Each proxy is an entry in `LOOKS` (`build_proxy_hero.py`): a palette, armor boxes, extra `Prop_` bones, and signature poses on the shared rig. Adding a hero's proxy means adding one entry.
+
 ![Captain America proxy poses](Docs/Images/cap_proxy_poses.png)
+![Iron Man proxy poses](Docs/Images/iron_man_proxy_poses.png)
 
 ## Toon shader
 
@@ -108,7 +122,7 @@ The simulation is plain C# (`Reforged.Sim.asmdef` sets `noEngineReferences`), so
 dotnet test Tools/SimTests
 ```
 
-There are 29 NUnit tests. Unity's Test Runner runs the same files.
+There are 45 NUnit tests. Unity's Test Runner runs the same files.
 
 | Area | What the tests cover |
 |---|---|
@@ -118,6 +132,7 @@ There are 29 NUnit tests. Unity's Test Runner runs the same files.
 | Assists | Assist callout spawn, three directional variants and cooldown; Combo Relay |
 | Destruction | Floor collapse to the level below; wall break; ceiling breakthrough; debris pickup, throw and environmental hit; shield ricochet and catch |
 | Content | Every playable hero uses every command; values survive the Inspector float round-trip exactly |
+| Hero mechanics | Overheat lockout, hover, and vent. Rage tiers unlocking throws and armor (with a control case that a calm Hulk *is* interrupted), Gamma Rage, Thunderclap lifting debris. Phase intangibility (with control), walking through walls, unblockable Phase Strike, Diamond armor and floor breaking. Size hurtboxes, size-cancels, Giant hitting every lane, Pym drain, small crits through armor, Quantum Tunnel. All four mechanic heroes staying in sync under rollback. |
 | Character select | Full roster shown, only built heroes pickable; assist must be someone nobody is playing; locking in a hero bumps anyone using them as assist; duplicates toggle; cameo assists (Nick Fury, War Machine) work in the sim |
 
 ## Layout
@@ -152,16 +167,17 @@ Docs/DESIGN.md        Game design document
 - Combat core, rollback session
 - Destruction and debris, multi-level floors
 - Assist callouts and relay, two Ultimates plus the Team Ultimate
-- **Character select with assist-partner picking**, and two assist-only cameos
-- **Blender pipeline:** validated rig and animation contract, Cap proxy with 40 clips, pre-fractured props
-- **Sim-driven animation playback**
-- **Toon/halftone/ink shader**
-- Graybox scene generator, debug HUD, hitbox overlay, onomatopoeia feedback
+- Character select with assist-partner picking, and two assist-only cameos
+- **Hero mechanics:** Heat (Iron Man), Rage (Hulk), Density (Vision), Size (Ant-Man), with graybox kits for Hulk, Vision and Ant-Man
+- **Blender pipeline:** validated rig and animation contract; proxies for **Captain America (40 clips) and Iron Man (29 clips)**; pre-fractured props
+- Sim-driven animation playback
+- Toon/halftone/ink shader that also shows mechanic state (phase, diamond, heat, World Breaker glows; size and rage scaling)
+- Graybox scene generator, debug HUD with mechanic meters, hitbox overlay, onomatopoeia feedback
 
 **Next:**
 - Online transport (Steam or EOS) feeding `RollbackSession`
-- Iron Man proxy and hero mechanics (heat, rage, density, size)
-- Thor, Hulk, and the remaining kits
+- Proxies for Hulk, Vision and Ant-Man (one `LOOKS` entry each)
+- Thor, Black Widow, Hawkeye, Black Panther and Captain Marvel kits and mechanics
 - VFX Graph library, and a real sculpted Cap through `export_hero.py`
 - The camera Rally prompt
 
@@ -169,4 +185,4 @@ Docs/DESIGN.md        Game design document
 
 What has been verified:
 - The simulation and tests, with `dotnet test`.
-- The Blender pipeline, by running it headless: the FBX re-imports with 21 bones, 40 clips at the exact gameplay lengths, and all materials.
+- The Blender pipeline, by running it headless. Cap's FBX re-imports with 21 bones, 40 clips at the exact gameplay lengths, and all materials. Iron Man's builds and validates with 20 bones and 29 clips. Both have rendered pose sheets.

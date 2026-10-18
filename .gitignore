@@ -30,3 +30,7 @@
 # Blender autosaves
 *.blend1
 *.blend2
+
+# Python
+__pycache__/
+*.pyc

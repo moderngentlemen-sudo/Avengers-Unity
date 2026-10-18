@@ -44,17 +44,20 @@ BONES = {
     "UpperLeg.R": ((-0.11, 0, 0.95), (-0.11, 0, 0.52), "Hips"),
     "LowerLeg.R": ((-0.11, 0, 0.52), (-0.11, 0, 0.1), "UpperLeg.R"),
     "Foot.R": ((-0.11, 0, 0.1), (-0.11, -0.16, 0.02), "LowerLeg.R"),
-    "Prop_Shield": ((0.6, -0.1, 1.45), (0.6, -0.3, 1.45), "LowerArm.L"),
 }
 
-COLORS = {
+# ----------------------------------------------------------------------------- Captain America
+
+CAP_PROP_BONES = {"Prop_Shield": ((0.6, -0.1, 1.45), (0.6, -0.3, 1.45), "LowerArm.L")}
+
+CAP_COLORS = {
     "Suit_Blue": (0.08, 0.16, 0.5), "Suit_Red": (0.72, 0.06, 0.07), "Suit_White": (0.92, 0.92, 0.95),
     "Skin": (0.86, 0.64, 0.5), "Leather_Brown": (0.33, 0.2, 0.11),
     "Shield_Red": (0.75, 0.05, 0.06), "Shield_White": (0.95, 0.95, 0.97), "Shield_Blue": (0.07, 0.16, 0.55),
 }
 
 # (bone, center, size, material) boxes; rest pose T-pose.
-PARTS = [
+CAP_PARTS = [
     ("Hips", (0, 0, 1.0), (0.36, 0.22, 0.16), "Leather_Brown"),
     ("Spine", (0, 0, 1.13), (0.34, 0.2, 0.06), "Suit_Red"),
     ("Spine", (0, 0, 1.19), (0.34, 0.2, 0.06), "Suit_White"),
@@ -86,13 +89,57 @@ SHIELD_CENTER = Vector((0.6, -0.11, 1.45))
 SHIELD_RINGS = [(0.38, 0.0, "Shield_Red"), (0.3, 0.006, "Shield_White"), (0.22, 0.012, "Shield_Red"), (0.14, 0.018, "Shield_Blue")]
 
 
-def build_rig(name):
+def cap_shield(bm, deform, groups, index_of):
+    for radius, fwd, mat in SHIELD_RINGS:
+        add_disc(bm, deform, groups["Prop_Shield"], SHIELD_CENTER + Vector((0, -fwd, 0)), radius, 0.04, index_of[mat])
+    add_star(bm, deform, groups["Prop_Shield"], SHIELD_CENTER + Vector((0, -0.04, 0)), 0.11, 0.008, index_of["Shield_White"])
+
+
+# ----------------------------------------------------------------------------- Iron Man
+
+IRON_MAN_COLORS = {
+    "Armor_Red": (0.68, 0.04, 0.05), "Armor_Gold": (0.86, 0.62, 0.14), "Arc_Reactor": (0.6, 0.95, 1.0),
+    "Metal_Dark": (0.12, 0.12, 0.14),
+}
+
+IRON_MAN_PARTS = [
+    ("Hips", (0, 0, 1.0), (0.36, 0.22, 0.16), "Armor_Red"),
+    ("Spine", (0, 0, 1.19), (0.32, 0.2, 0.18), "Armor_Gold"),
+    ("Chest", (0, 0, 1.39), (0.46, 0.27, 0.26), "Armor_Red"),
+    ("Chest", (0, -0.14, 1.4), (0.08, 0.02, 0.08), "Arc_Reactor"),
+    ("Neck", (0, 0, 1.55), (0.1, 0.1, 0.1), "Metal_Dark"),
+    ("Head", (0, 0, 1.73), (0.23, 0.25, 0.27), "Armor_Red"),
+    ("Head", (0, -0.115, 1.71), (0.18, 0.04, 0.2), "Armor_Gold"),       # faceplate
+    ("Head", (0.045, -0.137, 1.75), (0.05, 0.01, 0.02), "Arc_Reactor"),  # eyes
+    ("Head", (-0.045, -0.137, 1.75), (0.05, 0.01, 0.02), "Arc_Reactor"),
+    ("Shoulder.L", (0.13, 0, 1.46), (0.17, 0.21, 0.19), "Armor_Red"),
+    ("UpperArm.L", (0.325, 0, 1.45), (0.27, 0.13, 0.13), "Armor_Gold"),
+    ("LowerArm.L", (0.585, 0, 1.45), (0.26, 0.15, 0.15), "Armor_Red"),
+    ("Hand.L", (0.765, 0, 1.45), (0.12, 0.11, 0.11), "Armor_Red"),
+    ("Hand.L", (0.77, 0, 1.39), (0.05, 0.05, 0.01), "Arc_Reactor"),      # palm repulsor
+    ("Shoulder.R", (-0.13, 0, 1.46), (0.17, 0.21, 0.19), "Armor_Red"),
+    ("UpperArm.R", (-0.325, 0, 1.45), (0.27, 0.13, 0.13), "Armor_Gold"),
+    ("LowerArm.R", (-0.585, 0, 1.45), (0.26, 0.15, 0.15), "Armor_Red"),
+    ("Hand.R", (-0.765, 0, 1.45), (0.12, 0.11, 0.11), "Armor_Red"),
+    ("Hand.R", (-0.77, 0, 1.39), (0.05, 0.05, 0.01), "Arc_Reactor"),
+    ("UpperLeg.L", (0.11, 0, 0.735), (0.16, 0.17, 0.43), "Armor_Gold"),
+    ("LowerLeg.L", (0.11, 0, 0.31), (0.16, 0.17, 0.42), "Armor_Red"),
+    ("Foot.L", (0.11, -0.05, 0.05), (0.14, 0.27, 0.1), "Armor_Red"),
+    ("Foot.L", (0.11, -0.03, -0.005), (0.07, 0.1, 0.01), "Arc_Reactor"),  # boot thruster
+    ("UpperLeg.R", (-0.11, 0, 0.735), (0.16, 0.17, 0.43), "Armor_Gold"),
+    ("LowerLeg.R", (-0.11, 0, 0.31), (0.16, 0.17, 0.42), "Armor_Red"),
+    ("Foot.R", (-0.11, -0.05, 0.05), (0.14, 0.27, 0.1), "Armor_Red"),
+    ("Foot.R", (-0.11, -0.03, -0.005), (0.07, 0.1, 0.01), "Arc_Reactor"),
+]
+
+
+def build_rig(name, bones):
     data = bpy.data.armatures.new(name)
     rig = bpy.data.objects.new(name, data)
     bpy.context.scene.collection.objects.link(rig)
     bpy.context.view_layer.objects.active = rig
     bpy.ops.object.mode_set(mode="EDIT")
-    for bone, (head, tail, parent) in BONES.items():
+    for bone, (head, tail, parent) in bones.items():
         eb = data.edit_bones.new(bone)
         eb.head, eb.tail = head, tail
         eb.roll = 0.0
@@ -143,23 +190,22 @@ def add_star(bm, deform, group_index, center, radius, depth, mat_index):
         v[deform][group_index] = 1.0
 
 
-def build_mesh(rig, hero_name):
+def build_mesh(rig, hero_name, look, bones):
     mesh = bpy.data.meshes.new(hero_name + "_Body")
     obj = bpy.data.objects.new(hero_name + "_Body", mesh)
     bpy.context.scene.collection.objects.link(obj)
-    mats = [rp.material(n, c) for n, c in COLORS.items()]
+    mats = [rp.material(n, c) for n, c in look["colors"].items()]
     for m in mats:
         mesh.materials.append(m)
     index_of = {m.name: i for i, m in enumerate(mats)}
-    groups = {b: obj.vertex_groups.new(name=b).index for b in BONES if b != "Root"}
+    groups = {b: obj.vertex_groups.new(name=b).index for b in bones if b != "Root"}
 
     bm = bmesh.new()
     deform = bm.verts.layers.deform.verify()
-    for bone, center, size, mat in PARTS:
+    for bone, center, size, mat in look["parts"]:
         add_box(bm, deform, groups[bone], center, size, index_of[mat])
-    for radius, fwd, mat in SHIELD_RINGS:
-        add_disc(bm, deform, groups["Prop_Shield"], SHIELD_CENTER + Vector((0, -fwd, 0)), radius, 0.04, index_of[mat])
-    add_star(bm, deform, groups["Prop_Shield"], SHIELD_CENTER + Vector((0, -0.04, 0)), 0.11, 0.008, index_of["Shield_White"])
+    if look.get("extras"):
+        look["extras"](bm, deform, groups, index_of)
     bm.to_mesh(mesh)
     bm.free()
 
@@ -250,12 +296,23 @@ POSES = {
                  UpperArm_L=arm("L", 45), UpperArm_R=arm("R", 45)),
     "roll": dict(READY, Root=[("X", 40)], UpperLeg_L=leg("L", 80), LowerLeg_L=[("X", 110)], UpperLeg_R=leg("R", 80),
                  LowerLeg_R=[("X", 110)], Chest=[("X", 30)], root_z=-0.2),
+    # Iron Man: repulsor palms (hand bent up), unibeam chest-out, hover, flight dive.
+    "palm_r": dict(READY, UpperArm_R=reach("R", 5), LowerArm_R=[], Hand_R=[("Y", 70)], Chest=[("Z", -20)], UpperLeg_L=leg("L", 18)),
+    "palms": dict(READY, UpperArm_L=reach("L", 5), UpperArm_R=reach("R", 5), LowerArm_L=[], LowerArm_R=[], Hand_L=[("Y", -70)],
+                  Hand_R=[("Y", 70)], Chest=[("X", 5)], UpperLeg_L=leg("L", 20), LowerLeg_R=[("X", 25)]),
+    "beam_charge": dict(READY, UpperArm_L=[("Z", 50)], UpperArm_R=[("Z", -50)], LowerArm_L=[], LowerArm_R=[], Chest=[("X", 10)], root_z=-0.05),
+    "beam": dict(READY, UpperArm_L=[("Z", 70), ("X", 20)], UpperArm_R=[("Z", -70), ("X", 20)], LowerArm_L=[], LowerArm_R=[],
+                 Chest=[("X", -22)], Head=[("X", -10)], UpperLeg_L=leg("L", 15), UpperLeg_R=leg("R", -15)),
+    "hover": dict(READY, UpperArm_L=arm("L", 75, -15), UpperArm_R=arm("R", 75, -15), LowerArm_L=[], LowerArm_R=[],
+                  Hand_L=[("Z", 60)], Hand_R=[("Z", -60)], UpperLeg_L=leg("L", -5, 3), UpperLeg_R=leg("R", 5, 3), LowerLeg_L=[("X", 15)]),
+    "fly_dive": dict(READY, Root=[("X", 70)], UpperArm_L=arm("L", 80, -60), UpperArm_R=arm("R", 80, -60), LowerArm_L=[], LowerArm_R=[],
+                     UpperLeg_L=leg("L", -10, 2), UpperLeg_R=leg("R", -10, 2), root_z=0.3),
     "land": dict(READY, UpperLeg_L=leg("L", 45), LowerLeg_L=[("X", 70)], UpperLeg_R=leg("R", 45), LowerLeg_R=[("X", 70)],
                  Chest=[("X", 15)], root_z=-0.22),
 }
 
 # Move name -> (windup pose, strike pose). Anything not listed falls back on its command type.
-MOVE_POSES = {
+CAP_MOVE_POSES = {
     "Jab": ("windup_l", "punch_l"), "Cross": ("windup_r", "punch_r"), "Shield Bash": ("windup_l", "bash"),
     "Liberty Kick": ("crouch", "kick_r"), "Step-In Elbow": ("windup_r", "punch_r"), "Low Shield Sweep": ("crouch", "sweep"),
     "Haymaker": ("windup_r", "punch_r"), "Star-Spangled Uppercut": ("crouch", "uppercut"), "Shield Charge": ("windup_l", "bash"),
@@ -269,9 +326,27 @@ MOVE_POSES = {
 }
 
 
-def poses_for(move):
-    if move["name"] in MOVE_POSES:
-        return MOVE_POSES[move["name"]]
+IRON_MAN_MOVE_POSES = {
+    "Gauntlet Jab": ("windup_l", "punch_l"), "Repulsor Palm": ("windup_r", "palm_r"), "Thruster Kick": ("crouch", "kick_r"),
+    "Unibeam Burst": ("beam_charge", "beam"), "Boot-Jet Launcher": ("crouch", "uppercut"), "Air Palm": ("air_tuck", "palm_r"),
+    "Air Thruster Spin": ("overhead", "slam"), "Repulsor Blast": ("windup_r", "palm_r"), "Smart Missiles": ("ready", "beam"),
+    "Pulse Bolts": ("windup_r", "palms"), "Repulsor Barrage": ("palm_r", "palms"), "Afterburner Dive": ("hover", "fly_dive"),
+    "Overclock Protocol": ("beam_charge", "power"), "Unibeam": ("beam_charge", "beam"), "Proton Cannon": ("crouch", "palms"),
+    "Iron Legion": ("salute", "power"), "Jet Toss": ("block", "throw"),
+}
+
+# Each proxy: palette, armor boxes, extra Prop_ bones, extra geometry, signature poses, mode overrides.
+LOOKS = {
+    "captain_america": dict(colors=CAP_COLORS, parts=CAP_PARTS, prop_bones=CAP_PROP_BONES, extras=cap_shield,
+                            move_poses=CAP_MOVE_POSES, mode_poses={}),
+    "iron_man": dict(colors=IRON_MAN_COLORS, parts=IRON_MAN_PARTS, prop_bones={}, extras=None,
+                     move_poses=IRON_MAN_MOVE_POSES, mode_poses={"Airborne": "hover", "Taunt": "power"}),
+}
+
+
+def poses_for(move, look):
+    if move["name"] in look["move_poses"]:
+        return look["move_poses"][move["name"]]
     if move["tier"] in ("Super", "Ultimate"):
         return "salute", "power"
     if move["aerial"]:
@@ -326,8 +401,8 @@ def blend(rig, a, b, t):
     return rp.blend_poses(qa, qb, t), za + (zb - za) * t
 
 
-def move_clip(rig, move):
-    windup, strike = poses_for(move)
+def move_clip(rig, move, look):
+    windup, strike = poses_for(move, look)
     s, a, r, total = move["startup"], move["active"], move["recovery"], move["total"]
     step = 1 if move["tier"] in ("Super", "Ultimate") else 2
 
@@ -342,7 +417,7 @@ def move_clip(rig, move):
     return bake(rig, move["name"], total, pose_at, step)
 
 
-def mode_clip(rig, name, length):
+def mode_clip(rig, name, length, look):
     import math
     if name == "Idle":
         fn = lambda f: blend(rig, "ready", "breathe", 0.5 - 0.5 * math.cos(2 * math.pi * f / length))
@@ -353,6 +428,7 @@ def mode_clip(rig, name, length):
     else:
         target = {"Guard": "block", "Blockstun": "block", "Airborne": "jump", "Recover": "land", "Evade": "roll",
                   "Taunt": "salute", "Hitstun": "hurt", "Juggle": "juggle"}[name]
+        target = look["mode_poses"].get(name, target)
         start = {"Recover": "land", "Hitstun": "hurt", "Taunt": "ready", "Evade": "roll"}.get(name, target)
         fn = lambda f: blend(rig, start, target, ease(min(1.0, f / max(1.0, length * 0.5))))
     return bake(rig, name, length, fn, 2)
@@ -364,14 +440,18 @@ def build(hero_slug):
     data = rp.load_frame_data(hero_slug)
     rp.reset_scene()
     rig_name = hero_slug.title().replace("_", "") + "_Rig"
-    rig = build_rig(rig_name)
-    build_mesh(rig, hero_slug.title().replace("_", ""))
+    if hero_slug not in LOOKS:
+        raise SystemExit("No proxy look for %s; add one to LOOKS" % hero_slug)
+    look = LOOKS[hero_slug]
+    bones = dict(BONES, **look["prop_bones"])
+    rig = build_rig(rig_name, bones)
+    build_mesh(rig, hero_slug.title().replace("_", ""), look, bones)
     rig.animation_data_create()
 
     for move in data["moves"]:
-        move_clip(rig, move)
+        move_clip(rig, move, look)
     for clip, (length, _) in rp.MODE_CLIPS.items():
-        mode_clip(rig, clip, length)
+        mode_clip(rig, clip, length, look)
     rig.animation_data.action = bpy.data.actions["Idle"]
 
     errors = rp.validate_hero(data)

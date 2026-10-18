@@ -55,6 +55,13 @@ namespace Reforged.Game
                 case SimEventType.AssistCalled: Word("ASSIST!", pos, new Color(0.6f, 0.85f, 1f)); break;
                 case SimEventType.ComboRelay: Word("RELAY!", pos, Color.green); break;
                 case SimEventType.Ping: Word("!", pos + Vector3.up, Color.white); break;
+                case SimEventType.Overheat: Word("OVERHEAT!", pos + Vector3.up, new Color(1f, 0.4f, 0.1f)); break;
+                case SimEventType.HeatVent: Shake(0.9f); Word("FWOOSH!", pos, new Color(1f, 0.6f, 0.2f)); break;
+                case SimEventType.RageTier: if (e.B > 0) { Shake(0.5f); Word(e.B >= 2 ? "WORLD BREAKER!" : "SAVAGE!", pos + Vector3.up, Color.green); } break;
+                case SimEventType.GammaRoar: Shake(1.2f); Word("RRRAAAGH!", pos + Vector3.up, Color.green); break;
+                case SimEventType.PhaseStrike: if (e.Value == 1) Word("PHASE!", pos, Color.cyan); break;
+                case SimEventType.SizeChanged: Word(e.B < 0 ? "shrink!" : e.B > 0 ? "GROW!" : "pop!", pos, new Color(1f, 0.3f, 0.3f)); break;
+                case SimEventType.DebrisLifted: Shake(0.3f); break;
             }
         }
 

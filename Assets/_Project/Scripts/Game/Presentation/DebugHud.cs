@@ -46,6 +46,12 @@ namespace Reforged.Game
                 GUI.Label(new Rect(x, 60, panelWidth, 20), "Assist: " + assist, label);
                 GUI.Label(new Rect(x, 78, panelWidth, 32), "<color=#ffcc33>" + RankName(p.Rank) + "</color>", big);
                 GUI.Label(new Rect(x, 112, panelWidth, 20), "Score " + p.Score + "   Best " + p.BestCombo + " hits", label);
+                if (hero.Mechanic != HeroMechanic.None)
+                {
+                    var (meterName, state, color) = Mechanic(hero.Mechanic, f, session.World);
+                    Bar(new Rect(x, 136, panelWidth - 30, 8), f.Meter / (float)SimConstants.MechanicMax, color);
+                    GUI.Label(new Rect(x, 146, panelWidth, 20), meterName + (state.Length > 0 ? "  —  " + state : ""), label);
+                }
             }
 
             int combo = 0;
@@ -62,6 +68,25 @@ namespace Reforged.Game
             if (showFrameData)
                 GUI.Label(new Rect(10, Screen.height - 50, 600, 20),
                     "Frame " + world.Frame + "   Rollbacks " + session.Session.RollbacksPerformed + "   Checksum " + world.Checksum().ToString("X16"), label);
+        }
+
+        static (string name, string state, Color color) Mechanic(HeroMechanic mechanic, Fighter f, SimWorld world)
+        {
+            switch (mechanic)
+            {
+                case HeroMechanic.Heat:
+                    return ("Heat", world.IsOverheated(f) ? "<color=#ff5522><b>OVERHEATED</b></color>" : f.Meter >= SimConstants.VentMinHeat ? "D-pad ↓ to vent" : "",
+                        Color.Lerp(new Color(1f, 0.8f, 0.2f), new Color(1f, 0.2f, 0.1f), f.Meter / (float)SimConstants.MechanicMax));
+                case HeroMechanic.Rage:
+                    string[] tiers = { "Hulk", "Savage", "World Breaker", "WORLD BREAKER (Gamma Rage)" };
+                    return ("Rage", tiers[world.MechanicTier(f)], new Color(0.3f, 0.9f, 0.3f));
+                case HeroMechanic.Density:
+                    return ("Density", world.IsPhased(f) ? "PHASE" : world.IsDiamond(f) ? "DIAMOND" : "solid", new Color(0.4f, 0.9f, 1f));
+                case HeroMechanic.Size:
+                    return ("Pym Particles", world.IsSmall(f) ? "ANT-SIZE" : world.IsGiant(f) ? "GIANT" : "normal", new Color(0.9f, 0.2f, 0.25f));
+                default:
+                    return ("", "", Color.white);
+            }
         }
 
         static string RankName(StyleRank r) => r == StyleRank.Assemble ? "ASSEMBLE!" : r.ToString();

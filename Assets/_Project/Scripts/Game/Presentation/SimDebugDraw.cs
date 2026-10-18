@@ -19,17 +19,16 @@ namespace Reforged.Game
             foreach (var f in world.Fighters)
             {
                 var hero = world.Content[f.HeroIndex];
-                var half = SimConvert.ToUnity(hero.BodyHalfExtents);
+                var half = SimConvert.ToUnity(world.BodyHalf(f));
                 Gizmos.color = f.InvulnFrames > 0 ? new Color(1f, 1f, 1f, 0.5f) : new Color(0.2f, 0.5f, 1f, 0.8f);
                 Gizmos.DrawWireCube(SimConvert.ToUnity(f.Pos) + Vector3.up * half.y, half * 2f);
 
                 if (f.Mode != FighterMode.Attack || f.MoveIndex < 0) continue;
                 var m = hero.Moves[f.MoveIndex];
                 if (!m.HasHitbox || f.MoveFrame < m.ActiveStart || f.MoveFrame > m.ActiveEnd) continue;
-                var off = SimConvert.ToUnity(m.HitboxOffset);
-                off.x *= f.Facing;
+                world.AttackBox(f, m, out var center, out var boxHalf);
                 Gizmos.color = new Color(1f, 0.15f, 0.1f, 0.9f);
-                Gizmos.DrawWireCube(SimConvert.ToUnity(f.Pos) + off, SimConvert.ToUnity(m.HitboxHalfExtents) * 2f);
+                Gizmos.DrawWireCube(SimConvert.ToUnity(center), SimConvert.ToUnity(boxHalf) * 2f);
             }
 
             Gizmos.color = new Color(1f, 0.6f, 0.1f, 0.9f);
