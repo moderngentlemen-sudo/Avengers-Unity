@@ -69,6 +69,20 @@ Pick these heroes on character select. Each has a meter on the HUD.
 
 The Scene view draws live hurtboxes (blue), hitboxes (red), debris, and destructible health (`SimDebugDraw`).
 
+## Browser playtest (no Unity needed)
+
+`Tools/WebPlayable` compiles the same simulation (`Scripts/Sim`) to WebAssembly and draws it with a small canvas renderer.
+- It has character select, keyboard plus up to three gamepads, enemy waves, and every mechanic.
+- It's graybox: no Blender models or toon shader.
+
+```bash
+dotnet publish Tools/WebPlayable -c Release
+# Copy _framework/ to runtime/ (the page loads ./runtime/dotnet.js), then serve wwwroot
+# with wwwroot/playtest.html wrapped in a basic HTML document.
+```
+
+`WebGame.cs` is the bridge. It packs fighter, projectile, debris and destructible state into int arrays for the renderer, and adds playtest glue: enemy waves, reviving knocked-out heroes, and G to fill the Hero Gauge.
+
 ## Art pipeline (Blender)
 
 Art flows from Blender through validated FBX files, with no manual import settings. Scripts live in `Tools/Blender` and run in Blender 4.2+ (`blender -b -P script.py -- args`) or with the `bpy` Python module.

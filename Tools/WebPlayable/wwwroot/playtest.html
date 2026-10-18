@@ -1,0 +1,970 @@
+<title>Re:Forged Playtest</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+  /* Layout: one-screen arcade cabinet. Thin marquee bar, the game canvas fills the rest; select
+     screen and controls card float over the canvas. Single committed look: night-time comic print. */
+  :root {
+    --ink: #0e0c1c;          /* night sky / ink */
+    --panel: #1c1833;        /* card stock */
+    --paper: #f4ecd6;        /* newsprint for text */
+    --muted: #a49cc0;        /* captions */
+    --pow: #ffd23f;          /* POW yellow */
+    --bam: #e8413a;          /* BAM red */
+    --zap: #43b8ff;          /* ZAP cyan */
+    --line: #3a3358;
+    --display: "Bangers", "Impact", "Arial Black", sans-serif;
+    --body: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+    color-scheme: dark;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--ink); color: var(--paper); font-family: var(--body); font-size: 16px;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  header {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding-block: 8px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    border-bottom: 3px solid #000; background: var(--panel);
+  }
+  header h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 26px; letter-spacing: 1px; color: var(--pow);
+    text-shadow: 2px 2px 0 #000; line-height: 1; }
+  header .sub { color: var(--muted); font-size: 15px; flex: 1 1 200px; min-width: 0; }
+  button {
+    font-family: var(--body); font-weight: 700; font-size: 15px; letter-spacing: .04em; text-transform: uppercase;
+    color: #000; background: var(--pow); border: 2px solid #000; border-radius: 4px; padding: 6px 12px;
+    box-shadow: 3px 3px 0 #000; cursor: pointer;
+  }
+  button.ghost { background: var(--paper); }
+  button:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #000; }
+  button:focus-visible { outline: 3px solid var(--zap); outline-offset: 2px; }
+  #stage { position: relative; flex: 1 1 auto; min-height: 0; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .overlay {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    padding: 16px; overflow: auto;
+  }
+  .card {
+    background: var(--panel); border: 3px solid #000; box-shadow: 8px 8px 0 #000; border-radius: 6px;
+    padding: 20px; max-width: 1100px; width: 100%;
+  }
+  .card h2 { margin: 0 0 4px; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 5vw, 52px);
+    color: var(--pow); text-shadow: 3px 3px 0 #000; letter-spacing: 1px; text-wrap: balance; }
+  .card p { margin: 0 0 12px; color: var(--muted); max-width: 65ch; }
+  .slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
+  .slot { border: 2px solid #000; border-radius: 4px; padding: 12px; background: #120f24; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .slot .who { font-family: var(--display); font-size: 22px; letter-spacing: 1px; }
+  .slot .label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .slot .pick { font-family: var(--display); font-size: 30px; line-height: 1; color: var(--paper); }
+  .slot .pick.off { color: #6c648c; }
+  .slot .note { font-size: 14px; color: var(--muted); min-height: 1.2em; }
+  .slot .ready { font-family: var(--display); font-size: 34px; color: var(--pow); }
+  .slot.empty { opacity: .55; border-style: dashed; }
+  .roster { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .chip { font-size: 14px; padding: 3px 8px; border: 2px solid #000; border-radius: 3px; background: var(--paper); color: #000; font-weight: 700; }
+  .chip.soon { background: #2a2545; color: #8d85ad; }
+  .chip.cameo { background: var(--zap); }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+  .count { font-family: var(--display); font-size: 28px; color: var(--pow); }
+  .keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 6px 24px; margin-top: 8px; }
+  .keys div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding: 3px 0; font-size: 15px; }
+  .keys b { color: var(--pow); font-weight: 700; white-space: nowrap; }
+  .tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 12px; }
+  .tips div { background: #120f24; border: 2px solid #000; border-radius: 4px; padding: 10px; font-size: 15px; min-width: 0; }
+  .tips strong { display: block; font-family: var(--display); font-weight: 400; font-size: 20px; color: var(--zap); letter-spacing: 1px; }
+  #loading { font-family: var(--display); font-size: 34px; color: var(--pow); text-shadow: 3px 3px 0 #000; text-align: center; }
+  #loading small { display: block; font-family: var(--body); font-size: 16px; color: var(--muted); text-shadow: none; margin-top: 6px; }
+  @media (prefers-reduced-motion: reduce) { button:hover { transform: none; } }
+</style>
+
+<header>
+  <h1>Re:Forged Playtest</h1>
+  <span class="sub">Graybox build of the real combat simulation, compiled from the Unity project's C# to WebAssembly.</span>
+  <button id="btnControls" class="ghost" type="button">Controls (H)</button>
+  <button id="btnHitboxes" class="ghost" type="button">Hitboxes (B)</button>
+  <button id="btnSelect" type="button">Team select (Esc)</button>
+</header>
+
+<div id="stage">
+  <canvas id="game"></canvas>
+
+  <div id="loadingLayer" class="overlay">
+    <div id="loading">Loading the simulation…<small>Downloading the .NET runtime (about 4 MB) the first time.</small></div>
+  </div>
+
+  <div id="selectLayer" class="overlay" hidden>
+    <div class="card">
+      <h2>Assemble your team</h2>
+      <p>Press any key, or any button on a gamepad, to join. Up to four players: the keyboard plus three pads. Pick a hero, then an Assist Callout partner nobody is playing.</p>
+      <div class="slots" id="slots"></div>
+      <div class="roster" id="roster" aria-label="Roster"></div>
+      <div class="row">
+        <span class="count" id="countdown"></span>
+        <span id="selectHint" class="sub">Keyboard: A / D to browse, K to confirm, L to go back. Pad: d-pad or stick, A, B.</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="controlsLayer" class="overlay" hidden>
+    <div class="card">
+      <h2>Controls</h2>
+      <p>Every button does something. Keyboard on the left of each row, gamepad on the right. G fills your Hero Gauge so you can try Supers and Ultimates.</p>
+      <div class="keys">
+        <div><span>Move (W/S = into / out of the screen)</span><b>WASD · Left stick</b></div>
+        <div><span>Evade / lane-cancel</span><b>Arrows · Right stick flick</b></div>
+        <div><span>Light (strings)</span><b>J · X</b></div>
+        <div><span>Heavy (↑ launcher, → wall-splat)</span><b>I · Y</b></div>
+        <div><span>Jump (hold: Iron Man hovers)</span><b>K or Space · A</b></div>
+        <div><span>Special (+ direction)</span><b>L · B</b></div>
+        <div><span>Grab / pick up and throw debris</span><b>O · RB</b></div>
+        <div><span>Block (tap on impact = parry)</span><b>U · LB</b></div>
+        <div><span>Hero modifier (+ face button)</span><b>Shift · RT</b></div>
+        <div><span>Assist Callout (+ → / ↓ variants)</span><b>Q · LT</b></div>
+        <div><span>Super</span><b>Shift+Q · RT+LT</b></div>
+        <div><span>Ultimate I / Ultimate II</span><b>R / Shift+R · L3+R3 / RT+L3+R3</b></div>
+        <div><span>Taunt</span><b>1 · D-pad ↑</b></div>
+        <div><span>Hero tools (vent, roar, phase, size…)</span><b>2 / 3 / 4 · D-pad ↓ ← →</b></div>
+        <div><span>Callout ping</span><b>Tab · View</b></div>
+        <div><span>Fill Hero Gauge (playtest)</span><b>G · Menu</b></div>
+      </div>
+      <div class="tips">
+        <div><strong>Captain America</strong>X X X X string, ↑Y launcher then K to jump-cancel. B throws the shield; it ricochets and comes back.</div>
+        <div><strong>Iron Man · Heat</strong>Repulsors build heat. Hold Jump in the air to hover. Tool ↓ vents 300+ heat as a blast. Max heat overheats him.</div>
+        <div><strong>Hulk · Rage</strong>Rage fills as he fights; higher tiers add armor and bigger throws. Tool ↓ roars, → Thunderclap lifts debris.</div>
+        <div><strong>Vision · Density</strong>Tool ↓ phases through attacks and the drywall; attack out of it for an unblockable strike. → Diamond breaks floors.</div>
+        <div><strong>Ant-Man · Size</strong>Tool ↓ shrinks (crits through armor), → grows into Giant-Man (hits every lane), ← back to normal.</div>
+        <div><strong>The room</strong>Break the crate and car for throwable debris. Ground-pound the orange floor. Launch enemies up through the grey floor.</div>
+      </div>
+      <div class="row"><button id="btnCloseControls" type="button">Back to the fight</button></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { dotnet } from "./runtime/dotnet.js";
+
+// ---------------------------------------------------------------- boot the C# simulation
+let api, info;
+try {
+  const runtime = await dotnet.create();
+  const exports = await runtime.getAssemblyExports(runtime.getConfig().mainAssemblyName);
+  api = exports.WebGame;
+  info = JSON.parse(api.Describe());
+} catch (err) {
+  document.getElementById("loading").innerHTML =
+    "The simulation couldn't start.<small>" + String(err && err.message || err) + "</small>";
+  throw err;
+}
+document.getElementById("loadingLayer").hidden = true;
+
+const FX = 1 / 65536;                       // raw Q16.16 -> meters
+const EV = Object.fromEntries(info.events.map((n, i) => [n, i]));
+const MODE = Object.fromEntries(info.modes.map((n, i) => [n, i]));
+const HEROES = info.heroes;
+const STAGE = info.stage;
+const B = { Light: 1, Heavy: 2, Jump: 4, Special: 8, Grab: 16, Block: 32, HeroMod: 64, Assist: 128, Ultimate: 256,
+            ToolUp: 512, ToolDown: 1024, ToolLeft: 2048, ToolRight: 4096, Ping: 8192 };
+const SLOT_COLORS = ["#43b8ff", "#e8413a", "#53d769", "#ffd23f"];
+const PALETTE = {
+  "Captain America": ["#2b4fa8", "#c8202a", "#f2f2f2"],
+  "Iron Man": ["#b31a1f", "#e1a92a", "#9ff0ff"],
+  "Hulk": ["#4f9a3c", "#6b3a8f", "#c7f28a"],
+  "Vision": ["#9b2230", "#2f8a4e", "#ffd23f"],
+  "Ant-Man": ["#b8202a", "#2a2a2f", "#d9d9d9"],
+  "Nick Fury": ["#2b2b33", "#5a5a66", "#d9d9d9"],
+  "War Machine": ["#4b4f57", "#2a2c31", "#c7cdd6"],
+  "Hydra Trooper": ["#2f4a35", "#1c2a20", "#e8413a"],
+  "Hydra Heavy": ["#555d66", "#2b3036", "#e8413a"],
+  "Training Dummy": ["#b88c5a", "#8a6440", "#f4ecd6"],
+};
+const heroIndex = name => HEROES.findIndex(h => h.name === name);
+
+// ---------------------------------------------------------------- input devices
+// A device is the keyboard or one gamepad. Each produces { buttons, mx, mz, ax, ay } per tick plus
+// edge-triggered menu input. Presses are latched between ticks so quick taps are never lost.
+const keyMap = {
+  KeyJ: B.Light, KeyI: B.Heavy, KeyK: B.Jump, Space: B.Jump, KeyL: B.Special, KeyO: B.Grab, KeyU: B.Block,
+  ShiftLeft: B.HeroMod, ShiftRight: B.HeroMod, KeyQ: B.Assist, KeyR: B.Ultimate,
+  Digit1: B.ToolUp, Digit2: B.ToolDown, Digit3: B.ToolLeft, Digit4: B.ToolRight, Tab: B.Ping,
+};
+const keysDown = new Set();
+let keyLatched = 0;
+const keyboard = {
+  id: "kb", label: "Keyboard",
+  menu: { h: 0, confirm: false, back: false },
+  sample() {
+    let buttons = keyLatched;
+    for (const code of keysDown) if (keyMap[code]) buttons |= keyMap[code];
+    keyLatched = 0;
+    const ax = (keysDown.has("KeyD") ? 1 : 0) - (keysDown.has("KeyA") ? 1 : 0);
+    const az = (keysDown.has("KeyW") ? 1 : 0) - (keysDown.has("KeyS") ? 1 : 0);
+    const ex = (keysDown.has("ArrowRight") ? 1 : 0) - (keysDown.has("ArrowLeft") ? 1 : 0);
+    const ey = (keysDown.has("ArrowUp") ? 1 : 0) - (keysDown.has("ArrowDown") ? 1 : 0);
+    return { buttons, mx: ax * 127, mz: az * 127, ax: ex * 127, ay: ey * 127 };
+  },
+};
+const swallow = new Set([...Object.keys(keyMap), "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyA", "KeyS", "KeyD"]);
+addEventListener("keydown", e => {
+  if (e.target instanceof HTMLButtonElement && (e.code === "Space" || e.code === "Enter")) return;
+  if (swallow.has(e.code)) e.preventDefault();
+  if (e.repeat) return;
+  keysDown.add(e.code);
+  if (keyMap[e.code]) keyLatched |= keyMap[e.code];
+  onKeyCommand(e.code);
+  if (e.code === "KeyA") keyboard.menu.h = -1;
+  if (e.code === "KeyD") keyboard.menu.h = 1;
+  if (e.code === "KeyK" || e.code === "Space" || e.code === "Enter") keyboard.menu.confirm = true;
+  if (e.code === "KeyL" || e.code === "Backspace") keyboard.menu.back = true;
+  noteActivity(keyboard);
+});
+addEventListener("keyup", e => keysDown.delete(e.code));
+addEventListener("blur", () => keysDown.clear());
+
+const pads = new Map();   // gamepad index -> device
+function padDevice(index) {
+  if (!pads.has(index)) {
+    pads.set(index, {
+      id: "pad" + index, label: "Gamepad " + (index + 1), index, prev: [], latched: 0, stickDir: 0,
+      menu: { h: 0, confirm: false, back: false },
+      sample() {
+        const gp = navigator.getGamepads()[this.index];
+        if (!gp) return { buttons: 0, mx: 0, mz: 0, ax: 0, ay: 0 };
+        const out = this.read(gp);
+        out.buttons |= this.latched;
+        this.latched = 0;
+        return out;
+      },
+      read(gp) {
+        const p = i => !!(gp.buttons[i] && (gp.buttons[i].pressed || gp.buttons[i].value > 0.5));
+        let b = 0;
+        if (p(2)) b |= B.Light; if (p(3)) b |= B.Heavy; if (p(0)) b |= B.Jump; if (p(1)) b |= B.Special;
+        if (p(5)) b |= B.Grab; if (p(4)) b |= B.Block; if (p(7)) b |= B.HeroMod; if (p(6)) b |= B.Assist;
+        if (p(10) && p(11)) b |= B.Ultimate;
+        if (p(12)) b |= B.ToolUp; if (p(13)) b |= B.ToolDown; if (p(14)) b |= B.ToolLeft; if (p(15)) b |= B.ToolRight;
+        if (p(8)) b |= B.Ping;
+        const dz = v => Math.abs(v) < 0.2 ? 0 : v;
+        const ax = gp.axes;
+        return { buttons: b, mx: Math.round(dz(ax[0] || 0) * 127), mz: Math.round(-dz(ax[1] || 0) * 127),
+                 ax: Math.round(dz(ax[2] || 0) * 127), ay: Math.round(-dz(ax[3] || 0) * 127) };
+      },
+    });
+  }
+  return pads.get(index);
+}
+// Poll pads every animation frame: latch presses and derive menu edges.
+function pollPads() {
+  for (const gp of navigator.getGamepads ? navigator.getGamepads() : []) {
+    if (!gp) continue;
+    const dev = padDevice(gp.index);
+    const now = gp.buttons.map(b => !!(b && (b.pressed || b.value > 0.5)));
+    const edge = i => now[i] && !dev.prev[i];
+    const r = dev.read(gp);
+    const pressed = r.buttons & ~(dev.prevButtons || 0);
+    dev.latched |= pressed;
+    dev.prevButtons = r.buttons;
+    const x = (gp.axes[0] || 0);
+    const dir = edge(14) ? -1 : edge(15) ? 1 : x > 0.6 ? 1 : x < -0.6 ? -1 : Math.abs(x) < 0.3 ? 0 : dev.stickDir;
+    if (dir !== 0 && (dir !== dev.stickDir || edge(14) || edge(15))) dev.menu.h = dir;
+    dev.stickDir = Math.abs(x) < 0.3 && !now[14] && !now[15] ? 0 : dir;
+    if (edge(0)) dev.menu.confirm = true;
+    if (edge(1)) dev.menu.back = true;
+    if (edge(9)) { if (phase === "play") fillGauge(dev); else dev.menu.confirm = true; }
+    if (now.some((v, i) => v && !dev.prev[i])) noteActivity(dev);
+    dev.prev = now;
+  }
+}
+const takeMenu = dev => { const m = dev.menu; dev.menu = { h: 0, confirm: false, back: false }; return m; };
+
+// ---------------------------------------------------------------- team select
+// Same rules as Reforged.Sim.Lobby: built heroes only, assist must be someone nobody is playing.
+const playable = HEROES.map((h, i) => ({ ...h, index: i })).filter(h => h.playable);
+const assistable = HEROES.map((h, i) => ({ ...h, index: i })).filter(h => h.assist);
+let phase = "select";
+let slots = [null, null, null, null];   // { dev, step: 'hero'|'assist'|'ready', hero, assist }
+let countdown = -1;
+let picks = null;
+
+function noteActivity(dev) {
+  if (phase !== "select") return;   // new players join from team select (Esc)
+  if (slots.some(s => s && s.dev === dev)) return;
+  const free = slots.findIndex(s => !s);
+  if (free < 0) return;
+  slots[free] = { dev, step: "hero", hero: firstFree(playable, free, null), assist: 0 };
+  takeMenu(dev); // the button that joined doesn't also confirm
+  renderSelect();
+}
+const heroTaken = (idx, exceptSlot) => slots.some((s, i) => s && i !== exceptSlot && s.step !== "hero" && s.hero === idx);
+const canAssist = (idx, slot) => !slots.some(s => s && s.step !== "hero" && s.hero === idx) && assistable.some(a => a.index === idx);
+function firstFree(list, slot, current) {
+  const start = current == null ? 0 : list.findIndex(h => h.index === current);
+  for (let k = 0; k < list.length; k++) {
+    const h = list[(start + k) % list.length];
+    if (list === assistable ? canAssist(h.index, slot) : !heroTaken(h.index, slot)) return h.index;
+  }
+  return list[0].index;
+}
+function cycle(list, current, dir, ok) {
+  let i = list.findIndex(h => h.index === current);
+  for (let k = 0; k < list.length; k++) {
+    i = (i + dir + list.length) % list.length;
+    if (ok(list[i].index)) return list[i].index;
+  }
+  return current;
+}
+
+function updateSelect(dt) {
+  let backed = false;
+  slots.forEach((s, slot) => {
+    if (!s) return;
+    const m = takeMenu(s.dev);
+    if (s.step === "hero") {
+      if (m.h) s.hero = cycle(playable, s.hero, m.h, idx => !heroTaken(idx, slot));
+      if (m.confirm) {
+        s.step = "assist";
+        // Anyone whose assist was this hero picks again.
+        slots.forEach((o, j) => { if (o && j !== slot && o.step === "ready" && o.assist === s.hero) o.step = "assist"; });
+        slots.forEach((o, j) => { if (o && o.step === "assist" && !canAssist(o.assist, j)) o.assist = firstFree(assistable, j, o.assist); });
+        s.assist = firstFree(assistable, slot, null);
+      }
+      if (m.back) { slots[slot] = null; backed = true; }
+    } else if (s.step === "assist") {
+      if (m.h) s.assist = cycle(assistable, s.assist, m.h, idx => canAssist(idx, slot));
+      if (m.confirm && canAssist(s.assist, slot)) s.step = "ready";
+      if (m.back) { s.step = "hero"; backed = true; }
+    } else if (s.step === "ready") {
+      if (m.back) { s.step = "assist"; backed = true; }
+    }
+    if (m.h || m.confirm || m.back) renderSelect();
+  });
+  const joined = slots.filter(Boolean);
+  const allReady = joined.length > 0 && joined.every(s => s.step === "ready");
+  if (!allReady || backed) { if (countdown >= 0) { countdown = -1; renderSelect(); } return; }
+  if (countdown < 0) countdown = 1.5;
+  const before = Math.ceil(countdown);
+  countdown -= dt;
+  if (Math.ceil(countdown) !== before) renderSelect();
+  if (countdown <= 0) startMatch();
+}
+
+function renderSelect() {
+  const el = document.getElementById("slots");
+  el.innerHTML = "";
+  slots.forEach((s, slot) => {
+    const d = document.createElement("div");
+    d.className = "slot" + (s ? "" : " empty");
+    d.style.borderColor = s ? SLOT_COLORS[slot] : "";
+    if (!s) {
+      d.innerHTML = `<div class="who" style="color:${SLOT_COLORS[slot]}">P${slot + 1}</div><div class="note">Press any key or button to join</div>`;
+    } else {
+      const hero = HEROES[s.hero];
+      const assist = HEROES[s.assist];
+      const mech = { Heat: "Heat meter", Rage: "Rage meter", Density: "Density control", Size: "Size shifting", None: "Shield ricochets" }[hero.mechanic];
+      d.innerHTML = `
+        <div class="who" style="color:${SLOT_COLORS[slot]}">P${slot + 1} <span class="label">${s.dev.label}</span></div>
+        <div class="label">Hero</div>
+        <div class="pick${s.step === "hero" ? "" : " off"}">${s.step === "hero" ? "◀ " : ""}${hero.name}${s.step === "hero" ? " ▶" : ""}</div>
+        <div class="note">${mech}</div>
+        <div class="label">Assist partner</div>
+        <div class="pick${s.step === "assist" ? "" : " off"}" style="font-size:24px">${s.step === "hero" ? "—" : (s.step === "assist" ? "◀ " : "") + assist.name + (s.step === "assist" ? " ▶" : "")}</div>
+        ${s.step === "ready" ? '<div class="ready">Ready!</div>' : `<div class="note">${s.step === "hero" ? "Confirm to choose an assist" : "Confirm to lock in"}</div>`}`;
+    }
+    el.appendChild(d);
+  });
+  document.getElementById("countdown").textContent = countdown >= 0 ? "Starting in " + Math.ceil(countdown) + "…" : "";
+  const roster = document.getElementById("roster");
+  if (!roster.childElementCount) {
+    for (const r of info.roster) {
+      const c = document.createElement("span");
+      const built = r.hero >= 0;
+      c.className = "chip" + (built ? (r.role === "AssistOnly" ? " cameo" : "") : " soon");
+      c.textContent = r.name + (built ? "" : r.role === "Unlockable" ? " · unlockable" : " · soon");
+      c.title = r.archetype;
+      roster.appendChild(c);
+    }
+  }
+}
+
+function startMatch() {
+  const heroes = slots.map(s => (s ? s.hero : -1));
+  const assists = slots.map(s => (s ? s.assist : -1));
+  picks = slots.map(s => s && { dev: s.dev, hero: s.hero, assist: s.assist });
+  api.Start(heroes, assists);
+  phase = "play";
+  countdown = -1;
+  for (const s of slots) if (s) s.dev.sample();   // drop menu presses
+  document.getElementById("selectLayer").hidden = true;
+  particles.length = 0; words.length = 0; chunks.length = 0;
+  cam.x = -4;
+}
+function backToSelect() {
+  phase = "select";
+  if (slots.every(s => !s)) noteActivity(keyboard);
+  slots.forEach(s => { if (s) s.step = "hero"; });
+  document.getElementById("selectLayer").hidden = false;
+  renderSelect();
+}
+function fillGauge(dev) {
+  const slot = slots.findIndex(s => s && s.dev === dev);
+  if (slot >= 0) api.FillGauge(slot);
+}
+
+let showHitboxes = false;
+function toggleControls(force) {
+  const layer = document.getElementById("controlsLayer");
+  layer.hidden = force === undefined ? !layer.hidden : !force;
+}
+function onKeyCommand(code) {
+  if (code === "KeyH") toggleControls();
+  if (code === "KeyB") showHitboxes = !showHitboxes;
+  if (code === "KeyG" && phase === "play") fillGauge(keyboard);
+  if (code === "Escape") { if (!document.getElementById("controlsLayer").hidden) toggleControls(false); else backToSelect(); }
+}
+document.getElementById("btnControls").onclick = () => toggleControls();
+document.getElementById("btnCloseControls").onclick = () => toggleControls(false);
+document.getElementById("btnHitboxes").onclick = () => { showHitboxes = !showHitboxes; };
+document.getElementById("btnSelect").onclick = () => backToSelect();
+
+// ---------------------------------------------------------------- state unpacking
+function unpack(s) {
+  if (!s || !s.length) return null;
+  let o = 0;
+  const st = { frame: s[o++], assemble: s[o++], wave: s[o++] };
+  const nf = s[o++], np = s[o++], nd = s[o++], nx = s[o++];
+  st.players = [];
+  for (let p = 0; p < 4; p++) {
+    st.players.push(s[o] ? { fighterId: s[o + 1], style: s[o + 2], rank: s[o + 3], score: s[o + 4], best: s[o + 5], assistCd: s[o + 6], assistHero: s[o + 7] } : null);
+    o += 8;
+  }
+  st.fighters = [];
+  for (let i = 0; i < nf; i++, o += info.fighterStride) {
+    st.fighters.push({
+      id: s[o], hero: s[o + 1], team: s[o + 2], slot: s[o + 3], assist: !!s[o + 4],
+      x: s[o + 5] * FX, y: s[o + 6] * FX, z: s[o + 7] * FX, facing: s[o + 8], mode: s[o + 9],
+      move: s[o + 10], moveFrame: s[o + 11], health: s[o + 12], gauge: s[o + 13], combo: s[o + 14],
+      mech: s[o + 15], meter: s[o + 16], invuln: !!s[o + 17], hx: s[o + 18] * FX, hy: s[o + 19] * FX,
+      shrunk: s[o + 20], buff: s[o + 21], tier: s[o + 22], armor: s[o + 23],
+      hit: s[o + 24] ? { x: s[o + 25] * FX, y: s[o + 26] * FX, z: s[o + 27] * FX, hx: s[o + 28] * FX, hy: s[o + 29] * FX } : null,
+    });
+  }
+  st.projectiles = [];
+  for (let i = 0; i < np; i++, o += 6) st.projectiles.push({ id: s[o], hero: s[o + 1], move: s[o + 2], x: s[o + 3] * FX, y: s[o + 4] * FX, z: s[o + 5] * FX });
+  st.debris = [];
+  for (let i = 0; i < nd; i++, o += 6) st.debris.push({ id: s[o], x: s[o + 1] * FX, y: s[o + 2] * FX, z: s[o + 3] * FX, weight: s[o + 4], mode: s[o + 5] });
+  st.destructibles = [];
+  for (let i = 0; i < nx; i++, o += 3) st.destructibles.push({ broken: !!s[o], stage: s[o + 1], health: s[o + 2] });
+  return st;
+}
+
+// ---------------------------------------------------------------- effects
+const particles = [], words = [], chunks = [];
+let shake = 0, flash = 0;
+const HIT_WORDS = ["POW!", "WHAM!", "KRAK!", "THOOM!", "BLAM!", "SMASH!"];
+function word(text, x, y, z, color, size = 1) {
+  words.push({ text, x, y, z, color, size, age: 0, life: 0.75, rot: (Math.random() - 0.5) * 0.35 });
+}
+function sparks(x, y, z, color, n = 8, speed = 6) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2;
+    particles.push({ x, y, z, vx: Math.cos(a) * speed * (0.4 + Math.random()), vy: Math.sin(a) * speed * (0.4 + Math.random()), age: 0, life: 0.35, color });
+  }
+}
+function shatter(d) {
+  const color = d.name === "Parked Car" ? "#b3262a" : d.name === "Drywall" ? "#e2d9bf" : d.name === "Weak Floor" ? "#d08a3c" : "#9a6a3a";
+  const n = Math.min(40, Math.round(6 + d.hx * d.hy * d.hz * 40));
+  for (let i = 0; i < n; i++) {
+    chunks.push({ x: d.cx + (Math.random() - 0.5) * d.hx * 2, y: d.cy + (Math.random() - 0.5) * d.hy * 2, z: d.cz + (Math.random() - 0.5) * d.hz,
+      vx: (Math.random() - 0.5) * 8, vy: Math.random() * 7 + 1, s: 0.12 + Math.random() * 0.25, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 12,
+      age: 0, life: 1.6 + Math.random(), color });
+  }
+}
+function handleEvents(ev) {
+  for (let o = 0; o < ev.length; o += 7) {
+    const t = ev[o], a = ev[o + 1], b = ev[o + 2], v = ev[o + 3];
+    const x = ev[o + 4] * FX, y = ev[o + 5] * FX + 1.2, z = ev[o + 6] * FX;
+    switch (t) {
+      case EV.Hit: sparks(x, y, z, "#ffd23f", 6 + Math.min(10, v / 10)); shake = Math.max(shake, Math.min(14, v / 9));
+        if (v >= 70) word(HIT_WORDS[(a + v) % HIT_WORDS.length], x, y + 0.4, z, "#ffd23f"); break;
+      case EV.Blocked: sparks(x, y, z, "#9ff0ff", 5, 4); break;
+      case EV.Parry: word("PARRY!", x, y + 0.5, z, "#43b8ff"); shake = 8; break;
+      case EV.ArmorBreak: word("BREAK!", x, y + 0.5, z, "#ff8a2a"); shake = 10; break;
+      case EV.ArmorHit: sparks(x, y, z, "#c7cdd6", 4, 3); break;
+      case EV.Launch: sparks(x, y - 0.6, z, "#ffffff", 6, 5); break;
+      case EV.WallBreak: word("KRAKOOM!", x, y + 0.5, z, "#e8413a", 1.3); shake = 18; break;
+      case EV.CeilingBreakthrough: word("THROUGH THE ROOF!", x, y + 0.8, z, "#e8413a", 1.1); shake = 16; break;
+      case EV.FloorCollapse: word("CRUNCH!", x, y, z, "#e8413a", 1.4); shake = 20; break;
+      case EV.DestructibleBroken: shatter(STAGE.destructibles[a]); shake = Math.max(shake, 9); break;
+      case EV.EnvironmentalHit: word("CLANG!", x, y + 0.4, z, "#f4ecd6"); break;
+      case EV.UltimateStarted: word(v === 2 ? "ULTIMATE II!" : "ULTIMATE!", x, y + 1.2, z, "#ff6bd6", 1.4); flash = 0.5; shake = 10; break;
+      case EV.SuperStarted: word("SUPER!", x, y + 1, z, "#ff6bd6"); flash = 0.25; break;
+      case EV.TeamUltimate: word("AVENGERS ASSEMBLE!", cam.x, 4, 0, "#ff6bd6", 1.8); flash = 0.9; shake = 26; break;
+      case EV.AssistCalled: word("ASSIST!", x, y + 0.6, z, "#9ff0ff", 0.9); break;
+      case EV.AssistNotReady: break;
+      case EV.ComboRelay: word("RELAY!", x, y + 0.6, z, "#53d769"); break;
+      case EV.KO: word("K.O.!", x, y + 0.8, z, "#e8413a", 1.3); shake = 12; break;
+      case EV.Ricochet: sparks(x, y - 1.2 + 1.1, z, "#ffffff", 4, 4); break;
+      case EV.ProjectileCaught: word("CATCH!", x, y, z, "#43b8ff", 0.8); break;
+      case EV.Overheat: word("OVERHEAT!", x, y + 1, z, "#ff6a2a"); break;
+      case EV.HeatVent: word("FWOOSH!", x, y + 0.4, z, "#ff9a3c", 1.2); sparks(x, y, z, "#ff9a3c", 24, 9); shake = 12; break;
+      case EV.RageTier: if (b > 0) { word(b >= 2 ? "WORLD BREAKER!" : "SAVAGE!", x, y + 1, z, "#53d769", 1.1); shake = 8; } break;
+      case EV.GammaRoar: word("RRRAAAGH!", x, y + 1, z, "#53d769", 1.4); shake = 16; break;
+      case EV.PhaseStrike: if (v === 1) word("PHASE!", x, y + 0.4, z, "#9ff0ff"); break;
+      case EV.SizeChanged: word(b < 0 ? "shrink!" : b > 0 ? "GROW!" : "pop!", x, y + 0.4, z, "#ff6b6b", b > 0 ? 1.2 : 0.8); break;
+      case EV.DensityChanged: word(b === 1 ? "phase" : b === 2 ? "DIAMOND!" : "solid", x, y + 0.4, z, "#9ff0ff", 0.8); break;
+      case EV.StyleRankUp: break;
+      case EV.Taunt: word("C'MON!", x, y + 1, z, "#f4ecd6", 0.8); break;
+    }
+  }
+}
+
+// ---------------------------------------------------------------- rendering
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+let W = 0, H = 0, dpr = 1;
+function resize() {
+  const r = canvas.getBoundingClientRect();
+  dpr = Math.min(2, devicePixelRatio || 1);
+  W = Math.max(1, Math.round(r.width * dpr)); H = Math.max(1, Math.round(r.height * dpr));
+  canvas.width = W; canvas.height = H;
+  buildBackdrop();
+}
+addEventListener("resize", resize);
+
+const cam = { x: -4, ppm: 50 };
+const DEPTH = 0.22;
+const sx = x => (x - cam.x) * cam.ppm + W / 2;
+const sy = (y, z) => H * 0.86 - (y + z * DEPTH) * cam.ppm;
+
+let backdrop = null;
+function buildBackdrop() {
+  backdrop = document.createElement("canvas");
+  backdrop.width = W; backdrop.height = H;
+  const b = backdrop.getContext("2d");
+  const g = b.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, "#14102b"); g.addColorStop(0.7, "#2a1f4a"); g.addColorStop(1, "#3b2a55");
+  b.fillStyle = g; b.fillRect(0, 0, W, H);
+  // Halftone print dots, bigger toward the horizon glow.
+  const step = 10 * dpr;
+  for (let y = 0; y < H; y += step) {
+    for (let x = (y / step) % 2 ? step / 2 : 0; x < W; x += step) {
+      const r = (y / H) * 2.2 * dpr;
+      b.fillStyle = "rgba(255,210,63,0.07)";
+      b.beginPath(); b.arc(x, y, r, 0, Math.PI * 2); b.fill();
+    }
+  }
+}
+// Parallax skyline, generated once from a fixed seed.
+const skyline = [];
+{ let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let x = -40; x < 70; x += 1.5 + rnd() * 2.5) skyline.push({ x, w: 1.2 + rnd() * 2.6, h: 4 + rnd() * 10, lit: rnd() }); }
+
+function poly(points, fill, stroke = "#000", lw = 2) {
+  ctx.beginPath();
+  points.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+  ctx.closePath();
+  ctx.fillStyle = fill; ctx.fill();
+  if (stroke) { ctx.lineWidth = lw * dpr; ctx.strokeStyle = stroke; ctx.stroke(); }
+}
+// A box in world space: front face plus top face, like a belt-scroller prop.
+function box(cx, cy, cz, hx, hy, hz, front, top, stroke = "#000") {
+  const x0 = sx(cx - hx), x1 = sx(cx + hx);
+  const yb = sy(cy - hy, cz - hz), yt = sy(cy + hy, cz - hz), ytb = sy(cy + hy, cz + hz);
+  poly([[x0, yt], [x1, yt], [x1 + 0, ytb], [x0, ytb]], top, stroke);
+  poly([[x0, yb], [x1, yb], [x1, yt], [x0, yt]], front, stroke);
+}
+
+function drawStage(st) {
+  ctx.drawImage(backdrop, 0, 0);
+  // Skyline at 30% parallax.
+  for (const b of skyline) {
+    const x = (b.x - cam.x * 0.3) * cam.ppm * 0.6 + W / 2;
+    const w = b.w * cam.ppm * 0.6, h = b.h * cam.ppm * 0.6;
+    ctx.fillStyle = "#1b1636";
+    ctx.fillRect(x, H * 0.62 - h, w, h + H * 0.2);
+    if (b.lit > 0.5) { ctx.fillStyle = "rgba(255,210,63,0.25)"; for (let wy = H * 0.62 - h + 8 * dpr; wy < H * 0.62; wy += 14 * dpr) ctx.fillRect(x + w * 0.3, wy, w * 0.15, 5 * dpr); }
+  }
+  // Ground: a deep street with lane lines.
+  const g = STAGE.platforms[0];
+  const x0 = Math.max(sx(g.minX), -50), x1 = Math.min(sx(g.maxX), W + 50);
+  poly([[x0, sy(0, g.minZ)], [x1, sy(0, g.minZ)], [x1, sy(0, g.maxZ)], [x0, sy(0, g.maxZ)]], "#3b3550");
+  ctx.strokeStyle = "rgba(255,255,255,0.12)"; ctx.lineWidth = 2 * dpr; ctx.setLineDash([18 * dpr, 14 * dpr]);
+  for (const lz of [-1, 1]) { ctx.beginPath(); ctx.moveTo(x0, sy(0, lz)); ctx.lineTo(x1, sy(0, lz)); ctx.stroke(); }
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#24203a"; ctx.fillRect(x0, sy(0, g.minZ), x1 - x0, H - sy(0, g.minZ));
+  ctx.strokeStyle = "#000"; ctx.lineWidth = 3 * dpr; ctx.beginPath(); ctx.moveTo(x0, sy(0, g.minZ)); ctx.lineTo(x1, sy(0, g.minZ)); ctx.stroke();
+
+  // Upper floors (back to front is fine: they don't overlap in x).
+  STAGE.platforms.forEach((p, i) => {
+    if (i === 0) return;
+    const d = p.destructible >= 0 ? st.destructibles[p.destructible] : null;
+    if (d && d.broken) return;
+    const front = d ? "#c47a33" : "#58607a", top = d ? "#e0a256" : "#7a83a0";
+    box((p.minX + p.maxX) / 2, p.top - 0.15, (p.minZ + p.maxZ) / 2, (p.maxX - p.minX) / 2, 0.15, (p.maxZ - p.minZ) / 2, front, top);
+    // Support pillars under the slab.
+    for (let px = p.minX + 0.4; px < p.maxX; px += 3.9) box(px, p.top / 2 - 0.15, p.minZ + 0.3, 0.18, p.top / 2 - 0.15, 0.2, "#2f2a46", "#3d3758");
+    if (d && d.stage > 0) cracks((p.minX + p.maxX) / 2, p.top - 0.15, p.minZ, (p.maxX - p.minX) / 2, d.stage, i);
+  });
+  // Walls.
+  STAGE.walls.forEach((w, i) => {
+    const d = w.destructible >= 0 ? st.destructibles[w.destructible] : null;
+    if (d && d.broken) return;
+    box(w.x, (w.minY + w.maxY) / 2, 0, 0.15, (w.maxY - w.minY) / 2, (STAGE.maxZ - STAGE.minZ) / 2, "#d9cfb2", "#efe6cc");
+    if (d && d.stage > 0) cracks(w.x, (w.minY + w.maxY) / 2, STAGE.minZ, 0.15, d.stage + 1, 50 + i);
+  });
+}
+function cracks(cx, cy, z, hx, stage, seed) {
+  ctx.strokeStyle = "#000"; ctx.lineWidth = 2 * dpr;
+  let s = seed * 97 + 13;
+  const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let c = 0; c < stage * 3; c++) {
+    let x = sx(cx + (rnd() - 0.5) * hx * 1.8), y = sy(cy, z);
+    ctx.beginPath(); ctx.moveTo(x, y);
+    for (let k = 0; k < 4; k++) { x += (rnd() - 0.5) * 16 * dpr; y += (rnd() - 0.3) * 10 * dpr; ctx.lineTo(x, y); }
+    ctx.stroke();
+  }
+}
+
+function propDraw(i, d, st) {
+  const def = STAGE.destructibles[i];
+  if (d.broken) return;
+  const front = def.name === "Parked Car" ? "#b3262a" : "#9a6a3a", top = def.name === "Parked Car" ? "#d6454a" : "#b9874f";
+  if (def.name === "Parked Car") {
+    box(def.cx, def.cy - def.hy * 0.3, def.cz, def.hx, def.hy * 0.7, def.hz, front, top);
+    box(def.cx, def.cy + def.hy * 0.6, def.cz, def.hx * 0.55, def.hy * 0.4, def.hz * 0.9, "#7fb8d8", "#a8d6ee");
+    for (const wx of [-0.65, 0.65]) { ctx.fillStyle = "#111"; ctx.beginPath(); ctx.arc(sx(def.cx + wx * def.hx), sy(0.25, def.cz - def.hz), 0.28 * cam.ppm, 0, Math.PI * 2); ctx.fill(); }
+  } else {
+    box(def.cx, def.cy, def.cz, def.hx, def.hy, def.hz, front, top);
+    ctx.strokeStyle = "#5a3a1c"; ctx.lineWidth = 2 * dpr;
+    const x0 = sx(def.cx - def.hx), x1 = sx(def.cx + def.hx), y0 = sy(def.cy - def.hy, def.cz - def.hz), y1 = sy(def.cy + def.hy, def.cz - def.hz);
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.moveTo(x1, y0); ctx.lineTo(x0, y1); ctx.stroke();
+  }
+  if (d.stage > 0) cracks(def.cx, def.cy, def.cz - def.hz, def.hx, d.stage + 1, i);
+}
+
+// Height of the floor under a point (for shadows), honoring broken platforms.
+function floorUnder(x, y, z, st) {
+  let best = 0;
+  STAGE.platforms.forEach((p, i) => {
+    if (p.destructible >= 0 && st.destructibles[p.destructible].broken) return;
+    if (x < p.minX || x > p.maxX || z < p.minZ || z > p.maxZ) return;
+    if (p.top <= y + 0.01 && p.top > best) best = p.top;
+  });
+  return best;
+}
+
+function drawFighter(f, st, t) {
+  const hero = HEROES[f.hero];
+  const [c1, c2, c3] = PALETTE[hero.name] || ["#888", "#555", "#ddd"];
+  const dead = f.mode === MODE.Dead;
+  const knocked = f.mode === MODE.Knockdown || dead;
+  const juggle = f.mode === MODE.Juggle;
+  const ink = f.slot >= 0 ? SLOT_COLORS[f.slot] : "#000";
+  const phased = hero.mechanic === "Density" && f.mech === 1;
+  const diamond = hero.mechanic === "Density" && f.mech === 2;
+
+  // Shadow on whatever floor is underneath.
+  const fy = floorUnder(f.x, f.y, f.z, st);
+  ctx.fillStyle = "rgba(0,0,0,0.35)";
+  ctx.beginPath(); ctx.ellipse(sx(f.x), sy(fy, f.z), f.hx * cam.ppm * 1.3, f.hx * cam.ppm * 0.35, 0, 0, Math.PI * 2); ctx.fill();
+
+  ctx.save();
+  let alpha = 1;
+  if (f.invuln && !phased && Math.floor(t * 20) % 2) alpha = 0.55;
+  if (phased) alpha = 0.45;
+  if (f.assist) alpha = Math.min(alpha, 0.8);
+  if (dead) alpha = 0.6;
+  ctx.globalAlpha = alpha;
+
+  const px = sx(f.x), py = sy(f.y, f.z);
+  ctx.translate(px, py);
+  let rot = 0;
+  if (knocked) rot = -f.facing * Math.PI / 2;
+  else if (juggle) rot = -f.facing * 0.5;
+  else if (f.mode === MODE.Hitstun) rot = -f.facing * 0.18;
+  else if (f.mode === MODE.Attack && !f.hit) rot = -f.facing * 0.08;
+  else if (f.mode === MODE.Attack && f.hit) rot = f.facing * 0.12;
+  ctx.rotate(rot);
+
+  const w = f.hx * 2 * cam.ppm, h = f.hy * 2 * cam.ppm;
+  // Glow for mechanic states.
+  let glow = null;
+  if (phased) glow = "#43e0ff";
+  else if (diamond) glow = "#ffffff";
+  else if (hero.mechanic === "Heat" && f.meter > 300) glow = f.mech === 1 ? "#ff3b1a" : "#ff9a3c";
+  else if (hero.mechanic === "Rage" && f.tier >= 1) glow = f.tier >= 3 ? "#7dff5a" : "#53d769";
+  else if (f.buff > 0) glow = "#ffd23f";
+  if (glow) { ctx.shadowColor = glow; ctx.shadowBlur = (hero.mechanic === "Heat" ? 6 + f.meter / 60 : 18) * dpr; }
+
+  const outline = Math.max(2, 3 * dpr);
+  // Legs.
+  ctx.fillStyle = c2; ctx.strokeStyle = "#000"; ctx.lineWidth = outline;
+  const legW = w * 0.36, legH = h * 0.42;
+  const stride = f.mode === MODE.Walk ? Math.sin(t * 14 + f.id) * w * 0.15 : 0;
+  ctx.beginPath(); ctx.roundRect(-w * 0.42 + stride, -legH, legW, legH, 3 * dpr); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.roundRect(w * 0.06 - stride, -legH, legW, legH, 3 * dpr); ctx.fill(); ctx.stroke();
+  // Torso.
+  ctx.fillStyle = diamond ? "#e8f4ff" : c1;
+  ctx.beginPath(); ctx.roundRect(-w / 2, -h * 0.82, w, h * 0.44, 6 * dpr); ctx.fill();
+  ctx.lineWidth = outline * 1.4; ctx.strokeStyle = ink; ctx.stroke();
+  ctx.shadowBlur = 0;
+  // Head.
+  const hr = Math.max(w * 0.34, 5 * dpr);
+  ctx.fillStyle = diamond ? "#ffffff" : c1;
+  ctx.beginPath(); ctx.arc(0, -h * 0.82 - hr * 0.9, hr, 0, Math.PI * 2); ctx.fill();
+  ctx.lineWidth = outline; ctx.strokeStyle = "#000"; ctx.stroke();
+  // Visor / face toward facing.
+  ctx.fillStyle = c3;
+  ctx.fillRect(f.facing > 0 ? hr * 0.05 : -hr * 0.85, -h * 0.82 - hr * 1.05, hr * 0.8, hr * 0.35);
+  // Emblem.
+  emblem(hero.name, 0, -h * 0.62, w, c3, f);
+  // Arm: toward the hitbox when a move is active, guarding when blocking, at rest otherwise.
+  ctx.strokeStyle = c2 === "#2a2a2f" ? c1 : c2; ctx.lineCap = "round"; ctx.lineWidth = Math.max(4, w * 0.22);
+  ctx.beginPath(); ctx.moveTo(0, -h * 0.72);
+  if (f.hit && !knocked) {
+    const hx = (f.hit.x - f.x) * cam.ppm, hy = -(f.hit.y - f.y) * cam.ppm;
+    const len = Math.min(Math.hypot(hx, hy), w * 2.4) / Math.max(1, Math.hypot(hx, hy));
+    ctx.lineTo(hx * len, -h * 0.72 + (hy + h * 0.72) * len * 0.6);
+  } else if (f.mode === MODE.Guard || f.mode === MODE.Blockstun) {
+    ctx.lineTo(f.facing * w * 0.75, -h * 0.75);
+  } else {
+    ctx.lineTo(f.facing * w * 0.45, -h * 0.45);
+  }
+  ctx.stroke();
+  if ((f.mode === MODE.Guard || f.mode === MODE.Blockstun) && hero.name === "Captain America") shieldIcon(f.facing * w * 0.8, -h * 0.72, w * 0.55);
+  ctx.restore();
+
+  // Strike flash on the active hitbox, in world space.
+  if (f.hit && f.team === 0 && f.hit.hx < 1.5) {
+    const x0 = sx(f.hit.x - f.hit.hx), x1 = sx(f.hit.x + f.hit.hx), y0 = sy(f.hit.y - f.hit.hy, f.hit.z), y1 = sy(f.hit.y + f.hit.hy, f.hit.z);
+    ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = "#ffffff";
+    ctx.beginPath(); ctx.roundRect(Math.min(x0, x1), y1, Math.abs(x1 - x0), y0 - y1, 8 * dpr); ctx.fill(); ctx.restore();
+  }
+  if (showHitboxes) {
+    ctx.strokeStyle = "#43b8ff"; ctx.lineWidth = 1.5 * dpr;
+    ctx.strokeRect(sx(f.x - f.hx), sy(f.y + f.hy * 2, f.z), f.hx * 2 * cam.ppm, f.hy * 2 * cam.ppm);
+    if (f.hit) { ctx.strokeStyle = "#ff3b3b"; ctx.strokeRect(sx(f.hit.x - f.hit.hx), sy(f.hit.y + f.hit.hy, f.hit.z), f.hit.hx * 2 * cam.ppm, f.hit.hy * 2 * cam.ppm); }
+  }
+
+  // Name tag / health over enemies, armor pips over heavies.
+  const top = sy(f.y + f.hy * 2, f.z) - 18 * dpr;
+  ctx.textAlign = "center"; ctx.font = `700 ${12 * dpr}px ${getComputedStyle(document.body).getPropertyValue("--body")}`;
+  if (f.slot >= 0 && !f.assist) {
+    ctx.fillStyle = SLOT_COLORS[f.slot]; ctx.fillText("P" + (f.slot + 1), px, top);
+  } else if (f.team === 1 && hero.name !== "Training Dummy" && f.health < hero.maxHealth && !dead) {
+    ctx.fillStyle = "#000"; ctx.fillRect(px - 20 * dpr, top - 4 * dpr, 40 * dpr, 5 * dpr);
+    ctx.fillStyle = "#e8413a"; ctx.fillRect(px - 20 * dpr, top - 4 * dpr, 40 * dpr * f.health / hero.maxHealth, 5 * dpr);
+  }
+  if (f.armor > 0) for (let a = 0; a < f.armor; a++) { ctx.fillStyle = "#c7cdd6"; ctx.fillRect(px - 14 * dpr + a * 10 * dpr, top - 14 * dpr, 7 * dpr, 7 * dpr); }
+  if (f.assist) { ctx.fillStyle = "#9ff0ff"; ctx.fillText("ASSIST", px, top); }
+}
+
+function emblem(name, x, y, w, c3, f) {
+  ctx.save(); ctx.translate(x, y);
+  const r = w * 0.18;
+  if (name === "Captain America") { star(0, 0, r * 1.2, "#f2f2f2"); }
+  else if (name === "Iron Man") { ctx.fillStyle = "#9ff0ff"; ctx.shadowColor = "#9ff0ff"; ctx.shadowBlur = 8 * dpr; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill(); }
+  else if (name === "Vision") { ctx.fillStyle = "#ffd23f"; ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r, 0); ctx.lineTo(0, r); ctx.lineTo(-r, 0); ctx.fill(); }
+  else if (name === "Hulk") { ctx.fillStyle = "#6b3a8f"; ctx.fillRect(-w / 2, w * 0.3, w, w * 0.25); }
+  else if (name === "Ant-Man") { ctx.fillStyle = "#d9d9d9"; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = "#b8202a"; ctx.fillRect(-r * 0.15, -r * 0.6, r * 0.3, r * 1.2); }
+  else if (name.startsWith("Hydra")) { ctx.fillStyle = "#e8413a"; ctx.beginPath(); ctx.arc(0, 0, r * 0.8, 0, Math.PI * 2); ctx.fill(); }
+  else if (name === "Training Dummy") { ctx.strokeStyle = "#e8413a"; ctx.lineWidth = 3 * dpr; ctx.beginPath(); ctx.arc(0, 0, r * 1.4, 0, Math.PI * 2); ctx.stroke(); }
+  ctx.restore();
+}
+function star(x, y, r, color) {
+  ctx.fillStyle = color; ctx.beginPath();
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r; ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); }
+  ctx.closePath(); ctx.fill();
+}
+function shieldIcon(x, y, r) {
+  for (const [rr, c] of [[1, "#c8202a"], [0.75, "#f2f2f2"], [0.5, "#c8202a"], [0.3, "#2b4fa8"]]) { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x, y, r * rr, 0, Math.PI * 2); ctx.fill(); }
+  star(x, y, r * 0.25, "#f2f2f2");
+  ctx.lineWidth = 2 * dpr; ctx.strokeStyle = "#000"; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.stroke();
+}
+
+function drawProjectile(p, t) {
+  const hero = HEROES[p.hero].name, move = HEROES[p.hero].moves[p.move].name;
+  const x = sx(p.x), y = sy(p.y, p.z), r = 0.32 * cam.ppm;
+  ctx.save();
+  if (hero === "Captain America") { ctx.translate(x, y); ctx.rotate(t * 20); shieldIcon(0, 0, r); }
+  else if (hero === "Hulk") { ctx.fillStyle = move === "Gamma Wave" ? "#7dff5a" : "#7a5a3a"; ctx.strokeStyle = "#000"; ctx.lineWidth = 2 * dpr; ctx.beginPath(); ctx.arc(x, y, r * 1.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+  else if (hero === "Ant-Man") { ctx.fillStyle = move === "Blue Disc" ? "#43b8ff" : "#e8413a"; ctx.beginPath(); ctx.ellipse(x, y, r * 0.7, r * 0.35, t * 6, 0, Math.PI * 2); ctx.fill(); }
+  else { const c = hero === "Vision" ? "#ffd23f" : hero === "Iron Man" ? "#9ff0ff" : "#f4ecd6"; ctx.fillStyle = c; ctx.shadowColor = c; ctx.shadowBlur = 16 * dpr; ctx.beginPath(); ctx.arc(x, y, r * 0.7, 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+}
+function drawDebris(d, t) {
+  const s = (d.weight >= 2 ? 0.6 : 0.35) * cam.ppm;
+  ctx.save(); ctx.translate(sx(d.x), sy(d.y + (d.weight >= 2 ? 0.45 : 0.3), d.z));
+  if (d.mode === 3 || d.mode === 0) ctx.rotate(t * 8 + d.id);
+  ctx.fillStyle = d.weight >= 2 ? "#8a8f99" : "#9a6a3a"; ctx.strokeStyle = "#000"; ctx.lineWidth = 2 * dpr;
+  ctx.beginPath(); ctx.rect(-s, -s * 0.8, s * 2, s * 1.6); ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+
+function drawEffects(dt) {
+  for (let i = chunks.length - 1; i >= 0; i--) {
+    const c = chunks[i]; c.age += dt; c.vy -= 18 * dt; c.x += c.vx * dt; c.y += c.vy * dt; c.rot += c.vr * dt;
+    if (c.y < 0) { c.y = 0; c.vy *= -0.3; c.vx *= 0.6; }
+    if (c.age > c.life) { chunks.splice(i, 1); continue; }
+    ctx.save(); ctx.globalAlpha = Math.min(1, (c.life - c.age) * 2); ctx.translate(sx(c.x), sy(c.y, c.z)); ctx.rotate(c.rot);
+    ctx.fillStyle = c.color; ctx.strokeStyle = "#000"; ctx.lineWidth = 1.5 * dpr; const s = c.s * cam.ppm;
+    ctx.fillRect(-s / 2, -s / 2, s, s); ctx.strokeRect(-s / 2, -s / 2, s, s); ctx.restore();
+  }
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i]; p.age += dt;
+    if (p.age > p.life) { particles.splice(i, 1); continue; }
+    const k = 1 - p.age / p.life;
+    ctx.strokeStyle = p.color; ctx.lineWidth = 3 * dpr * k;
+    const x = sx(p.x + p.vx * p.age), y = sy(p.y + p.vy * p.age, p.z);
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - p.vx * 0.03 * cam.ppm, y + p.vy * 0.03 * cam.ppm); ctx.stroke();
+  }
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  for (let i = words.length - 1; i >= 0; i--) {
+    const w = words[i]; w.age += dt;
+    if (w.age > w.life) { words.splice(i, 1); continue; }
+    const t = w.age / w.life;
+    const scale = (t < 0.15 ? 0.4 + (t / 0.15) * 0.9 : 1.3 - (t - 0.15) * 0.35) * w.size;
+    ctx.save(); ctx.globalAlpha = t > 0.65 ? 1 - (t - 0.65) / 0.35 : 1;
+    ctx.translate(sx(w.x), sy(w.y + t * 0.6, w.z)); ctx.rotate(w.rot); ctx.scale(scale, scale);
+    const size = 34 * dpr;
+    ctx.font = `${size}px ${getComputedStyle(document.body).getPropertyValue("--display")}`;
+    // Burst behind the word.
+    ctx.fillStyle = "rgba(0,0,0,0.0)";
+    ctx.lineJoin = "round"; ctx.lineWidth = 7 * dpr; ctx.strokeStyle = "#000"; ctx.strokeText(w.text, 0, 0);
+    ctx.fillStyle = w.color; ctx.fillText(w.text, 0, 0);
+    ctx.restore();
+  }
+  ctx.textBaseline = "alphabetic";
+}
+
+const RANKS = ["D", "C", "B", "A", "S", "SS", "ASSEMBLE!"];
+function drawHud(st) {
+  const pad = 12 * dpr, pw = Math.min(300 * dpr, (W - pad * 5) / 4);
+  const bodyFont = getComputedStyle(document.body).getPropertyValue("--body");
+  const dispFont = getComputedStyle(document.body).getPropertyValue("--display");
+  st.players.forEach((p, slot) => {
+    if (!p) return;
+    const f = st.fighters.find(x => x.id === p.fighterId);
+    if (!f) return;
+    const hero = HEROES[f.hero];
+    const x = pad + slot * (pw + pad), y = pad;
+    ctx.fillStyle = "rgba(14,12,28,0.82)"; ctx.strokeStyle = "#000"; ctx.lineWidth = 3 * dpr;
+    ctx.beginPath(); ctx.roundRect(x, y, pw, 92 * dpr, 6 * dpr); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = SLOT_COLORS[slot]; ctx.font = `${20 * dpr}px ${dispFont}`; ctx.textAlign = "left";
+    ctx.fillText("P" + (slot + 1) + "  " + hero.name.toUpperCase(), x + 10 * dpr, y + 24 * dpr);
+    ctx.textAlign = "right"; ctx.fillStyle = "#ffd23f"; ctx.font = `${26 * dpr}px ${dispFont}`;
+    ctx.fillText(RANKS[p.rank], x + pw - 10 * dpr, y + 26 * dpr);
+    bar(x + 10 * dpr, y + 32 * dpr, pw - 20 * dpr, 9 * dpr, f.health / hero.maxHealth, "#53d769");
+    for (let b = 0; b < 3; b++) bar(x + 10 * dpr + b * (pw - 20 * dpr) / 3, y + 46 * dpr, (pw - 20 * dpr) / 3 - 4 * dpr, 7 * dpr, Math.max(0, Math.min(1, (f.gauge - b * 100) / 100)), "#43b8ff");
+    if (hero.mechanic !== "None") {
+      const col = { Heat: f.mech === 1 ? "#ff3b1a" : "#ff9a3c", Rage: "#53d769", Density: "#9ff0ff", Size: "#e8413a" }[hero.mechanic];
+      bar(x + 10 * dpr, y + 58 * dpr, pw - 20 * dpr, 6 * dpr, f.meter / info.mechanicMax, col);
+    }
+    ctx.textAlign = "left"; ctx.fillStyle = "#a49cc0"; ctx.font = `600 ${13 * dpr}px ${bodyFont}`;
+    const assistName = p.assistHero >= 0 ? HEROES[p.assistHero].name : "—";
+    const mechLabel = mechanicLabel(hero, f);
+    ctx.fillText((mechLabel ? mechLabel + "  ·  " : "") + "Assist: " + assistName + (p.assistCd > 0 ? " " + (p.assistCd / 60).toFixed(1) + "s" : " READY"), x + 10 * dpr, y + 82 * dpr);
+  });
+  // Combo counter.
+  let combo = 0;
+  for (const f of st.fighters) if (f.team === 1 && f.combo > combo) combo = f.combo;
+  if (combo > 1) {
+    ctx.save(); ctx.textAlign = "right"; ctx.font = `${56 * dpr}px ${dispFont}`; ctx.lineWidth = 8 * dpr; ctx.strokeStyle = "#000";
+    ctx.translate(W - pad * 2, H * 0.36); ctx.rotate(-0.06);
+    ctx.strokeText(combo + " HITS!", 0, 0); ctx.fillStyle = "#e8413a"; ctx.fillText(combo + " HITS!", 0, 0); ctx.restore();
+  }
+  // Assemble meter and wave.
+  const mw = Math.min(420 * dpr, W - pad * 2), mx = (W - mw) / 2, my = H - 26 * dpr;
+  const full = st.assemble >= info.assembleMax;
+  bar(mx, my, mw, 10 * dpr, st.assemble / info.assembleMax, full ? "#ff6bd6" : "#8d5fd1");
+  ctx.textAlign = "center"; ctx.font = `${16 * dpr}px ${dispFont}`; ctx.fillStyle = full ? "#ff6bd6" : "#f4ecd6";
+  ctx.fillText(full ? "ASSEMBLE READY: EVERYONE PRESS R / L3+R3" : "ASSEMBLE", W / 2, my - 6 * dpr);
+  ctx.textAlign = "left"; ctx.fillStyle = "#ffd23f"; ctx.fillText("WAVE " + st.wave, pad, H - 14 * dpr);
+}
+function mechanicLabel(hero, f) {
+  switch (hero.mechanic) {
+    case "Heat": return f.mech === 1 ? "OVERHEATED" : "Heat " + Math.round(f.meter / 10) + "%";
+    case "Rage": return ["Hulk", "Savage", "World Breaker", "GAMMA RAGE"][Math.min(3, f.tier)];
+    case "Density": return ["Solid", "PHASE", "DIAMOND"][f.mech] || "";
+    case "Size": return f.mech < 0 ? "ANT-SIZE" : f.mech > 0 ? "GIANT" : "Normal size";
+    default: return "";
+  }
+}
+function bar(x, y, w, h, fill, color) {
+  ctx.fillStyle = "#000"; ctx.fillRect(x - dpr, y - dpr, w + 2 * dpr, h + 2 * dpr);
+  ctx.fillStyle = "#2a2545"; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = color; ctx.fillRect(x, y, w * Math.max(0, Math.min(1, fill)), h);
+}
+
+// ---------------------------------------------------------------- main loop
+let last = performance.now(), acc = 0, state = null, clock = 0;
+const STEP = 1 / 60;
+function frame(now) {
+  const dt = Math.min(0.1, (now - last) / 1000);
+  last = now; clock += dt;
+  pollPads();
+  if (phase === "select") {
+    updateSelect(dt);
+  } else if (document.getElementById("controlsLayer").hidden) {
+    acc += dt;
+    let ticks = 0;
+    while (acc >= STEP && ticks < 4) {
+      const packed = new Array(20).fill(0);
+      slots.forEach((s, slot) => {
+        if (!s) return;
+        const i = s.dev.sample();
+        packed.splice(slot * 5, 5, i.buttons, i.mx, i.mz, i.ax, i.ay);
+      });
+      api.Step(packed);
+      handleEvents(api.Events());
+      acc -= STEP; ticks++;
+    }
+    if (ticks === 4) acc = 0;
+    state = unpack(api.State());
+  }
+  render(dt);
+  requestAnimationFrame(frame);
+}
+
+function render(dt) {
+  if (!backdrop) resize();
+  const st = state;
+  if (!st) { ctx.drawImage(backdrop, 0, 0); return; }
+  // Camera frames every player hero (the sim's rally-friendly group framing, simplified).
+  const heroes = st.fighters.filter(f => f.slot >= 0 && !f.assist);
+  if (heroes.length) {
+    const xs = heroes.map(f => f.x);
+    const minX = Math.min(...xs), maxX = Math.max(...xs);
+    const spread = maxX - minX;
+    const targetPpm = Math.max(26 * dpr, Math.min(H / 10.5, W / (spread + 18)));
+    cam.ppm += (targetPpm - cam.ppm) * Math.min(1, dt * 3);
+    const half = W / 2 / cam.ppm;
+    const target = Math.max(STAGE.minX + half, Math.min(STAGE.maxX - half, (minX + maxX) / 2));
+    cam.x += (target - cam.x) * Math.min(1, dt * 5);
+  }
+  ctx.save();
+  if (shake > 0.2) { ctx.translate((Math.random() - 0.5) * shake * dpr, (Math.random() - 0.5) * shake * dpr); shake *= Math.pow(0.02, dt); } else shake = 0;
+  drawStage(st);
+  // Depth-sorted entities: props, fighters, debris and projectiles, far lane first.
+  const items = [];
+  st.destructibles.forEach((d, i) => { const def = STAGE.destructibles[i]; if (!STAGE.platforms.some(p => p.destructible === i) && !STAGE.walls.some(w => w.destructible === i)) items.push({ z: def.cz, y: 0, draw: () => propDraw(i, d, st) }); });
+  for (const f of st.fighters) items.push({ z: f.z, y: f.y, draw: () => drawFighter(f, st, clock) });
+  for (const d of st.debris) items.push({ z: d.z, y: d.y, draw: () => drawDebris(d, clock) });
+  for (const p of st.projectiles) items.push({ z: p.z - 0.01, y: p.y, draw: () => drawProjectile(p, clock) });
+  items.sort((a, b) => b.z - a.z || a.y - b.y);
+  for (const it of items) it.draw();
+  drawEffects(dt);
+  ctx.restore();
+  if (flash > 0) { ctx.fillStyle = `rgba(255,255,255,${Math.min(0.7, flash)})`; ctx.fillRect(0, 0, W, H); flash -= dt * 2; }
+  drawHud(st);
+}
+
+// Start on the select screen with the keyboard already joined, so a mouse-only first look still works.
+resize();
+document.getElementById("selectLayer").hidden = false;
+noteActivity(keyboard);
+renderSelect();
+requestAnimationFrame(frame);
+</script>
