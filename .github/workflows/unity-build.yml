@@ -62,6 +62,23 @@ jobs:
       # Switching on the Input System changes scripting defines, which only take effect in a
       # fresh editor session, so the setting is applied in one run and the player built in the next.
       - name: Enable the Input System backend
+        id: prepare
+        continue-on-error: true
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          unityVersion: auto
+          buildMethod: Reforged.EditorTools.CIBuild.Prepare
+          allowDirtyBuild: true
+
+      # The first import of a fresh Library occasionally crashes Unity's texture compressor in
+      # Docker. The retry resumes from the partly imported Library, so it rarely recurs.
+      - name: Enable the Input System backend (retry)
+        if: steps.prepare.outcome == 'failure'
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
