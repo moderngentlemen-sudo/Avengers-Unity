@@ -7,6 +7,7 @@ the clip names/lengths, and re-run export_hero.py. Animation lengths come from
 Docs/FrameData/<hero>.json, which Tools/FrameData generates from the simulation.
 
   python Tools/Blender/build_proxy_hero.py captain_america          (bpy module)
+  Heroes with a look: captain_america, iron_man, hulk, vision, ant_man
   blender -b -P Tools/Blender/build_proxy_hero.py -- captain_america (Blender CLI)
 """
 import os
@@ -130,6 +131,126 @@ IRON_MAN_PARTS = [
     ("LowerLeg.R", (-0.11, 0, 0.31), (0.16, 0.17, 0.42), "Armor_Red"),
     ("Foot.R", (-0.11, -0.05, 0.05), (0.14, 0.27, 0.1), "Armor_Red"),
     ("Foot.R", (-0.11, -0.03, -0.005), (0.07, 0.1, 0.01), "Arc_Reactor"),
+]
+
+
+# ----------------------------------------------------------------------------- Hulk
+# Built on the shared skeleton, then scaled 1.3x (see LOOKS) so he stands ~2.4 m, matching the
+# simulation's body box. Boxes overhang the bones on purpose: huge traps, forearms and fists.
+
+HULK_COLORS = {
+    "Gamma_Skin": (0.2, 0.5, 0.12), "Gamma_Dark": (0.12, 0.32, 0.08), "Pants_Purple": (0.3, 0.1, 0.42),
+    "Hair_Black": (0.04, 0.04, 0.05), "Eye_Glow": (0.55, 1.0, 0.35),
+}
+
+HULK_PARTS = [
+    ("Hips", (0, 0, 1.0), (0.42, 0.26, 0.18), "Pants_Purple"),
+    ("Spine", (0, 0.01, 1.18), (0.44, 0.27, 0.2), "Gamma_Skin"),
+    ("Chest", (0, 0.02, 1.38), (0.6, 0.34, 0.3), "Gamma_Skin"),
+    ("Chest", (0, -0.15, 1.42), (0.42, 0.03, 0.14), "Gamma_Dark"),     # pecs
+    ("Chest", (0.17, 0.02, 1.53), (0.16, 0.24, 0.1), "Gamma_Skin"),    # traps
+    ("Chest", (-0.17, 0.02, 1.53), (0.16, 0.24, 0.1), "Gamma_Skin"),
+    ("Neck", (0, -0.01, 1.55), (0.16, 0.14, 0.08), "Gamma_Skin"),
+    ("Head", (0, -0.03, 1.68), (0.22, 0.22, 0.22), "Gamma_Skin"),
+    ("Head", (0, 0.0, 1.8), (0.24, 0.24, 0.05), "Hair_Black"),
+    ("Head", (0, -0.035, 1.73), (0.18, 0.18, 0.04), "Gamma_Dark"),    # heavy brow
+    ("Head", (0.05, -0.143, 1.7), (0.04, 0.01, 0.02), "Eye_Glow"),
+    ("Head", (-0.05, -0.143, 1.7), (0.04, 0.01, 0.02), "Eye_Glow"),
+    ("Shoulder.L", (0.17, 0, 1.46), (0.2, 0.26, 0.24), "Gamma_Skin"),
+    ("UpperArm.L", (0.33, 0, 1.45), (0.29, 0.19, 0.19), "Gamma_Skin"),
+    ("LowerArm.L", (0.6, 0, 1.45), (0.27, 0.22, 0.22), "Gamma_Dark"),
+    ("Hand.L", (0.79, 0, 1.45), (0.17, 0.19, 0.19), "Gamma_Skin"),
+    ("Shoulder.R", (-0.17, 0, 1.46), (0.2, 0.26, 0.24), "Gamma_Skin"),
+    ("UpperArm.R", (-0.33, 0, 1.45), (0.29, 0.19, 0.19), "Gamma_Skin"),
+    ("LowerArm.R", (-0.6, 0, 1.45), (0.27, 0.22, 0.22), "Gamma_Dark"),
+    ("Hand.R", (-0.79, 0, 1.45), (0.17, 0.19, 0.19), "Gamma_Skin"),
+    ("UpperLeg.L", (0.12, 0, 0.74), (0.2, 0.22, 0.42), "Pants_Purple"),
+    ("LowerLeg.L", (0.12, 0, 0.42), (0.2, 0.21, 0.2), "Pants_Purple"),   # torn cut-offs
+    ("LowerLeg.L", (0.12, 0, 0.2), (0.17, 0.18, 0.24), "Gamma_Skin"),
+    ("Foot.L", (0.12, -0.05, 0.05), (0.17, 0.3, 0.1), "Gamma_Dark"),
+    ("UpperLeg.R", (-0.12, 0, 0.74), (0.2, 0.22, 0.42), "Pants_Purple"),
+    ("LowerLeg.R", (-0.12, 0, 0.42), (0.2, 0.21, 0.2), "Pants_Purple"),
+    ("LowerLeg.R", (-0.12, 0, 0.2), (0.17, 0.18, 0.24), "Gamma_Skin"),
+    ("Foot.R", (-0.12, -0.05, 0.05), (0.17, 0.3, 0.1), "Gamma_Dark"),
+]
+
+# ----------------------------------------------------------------------------- Vision
+
+VISION_COLORS = {
+    "Synth_Green": (0.18, 0.45, 0.22), "Synth_Red": (0.65, 0.08, 0.12), "Cape_Gold": (0.88, 0.66, 0.12),
+    "Mind_Stone": (1.0, 0.9, 0.3), "Diamond_Trim": (0.8, 0.62, 0.15),
+}
+
+VISION_PARTS = [
+    ("Hips", (0, 0, 1.0), (0.34, 0.2, 0.16), "Synth_Green"),
+    ("Spine", (0, 0, 1.19), (0.3, 0.19, 0.18), "Synth_Green"),
+    ("Chest", (0, 0, 1.39), (0.42, 0.24, 0.24), "Synth_Green"),
+    ("Chest", (0, -0.125, 1.39), (0.16, 0.02, 0.16), "Diamond_Trim"),   # chest diamond
+    ("Chest", (0, -0.13, 1.39), (0.09, 0.02, 0.09), "Synth_Green"),
+    ("Chest", (0, 0.06, 1.51), (0.5, 0.18, 0.05), "Cape_Gold"),         # collar
+    ("Chest", (0, 0.135, 1.24), (0.44, 0.02, 0.5), "Cape_Gold"),       # cape (rigid on the chest)
+    ("Spine", (0, 0.15, 0.82), (0.48, 0.02, 0.34), "Cape_Gold"),
+    ("Neck", (0, 0, 1.55), (0.09, 0.09, 0.1), "Synth_Red"),
+    ("Head", (0, 0, 1.72), (0.2, 0.22, 0.25), "Synth_Red"),
+    ("Head", (0, -0.112, 1.77), (0.05, 0.01, 0.05), "Mind_Stone"),
+    ("Head", (0.04, -0.112, 1.71), (0.04, 0.01, 0.015), "Synth_Green"),
+    ("Head", (-0.04, -0.112, 1.71), (0.04, 0.01, 0.015), "Synth_Green"),
+    ("Shoulder.L", (0.13, 0, 1.45), (0.13, 0.17, 0.15), "Synth_Green"),
+    ("UpperArm.L", (0.325, 0, 1.45), (0.26, 0.12, 0.12), "Synth_Green"),
+    ("LowerArm.L", (0.585, 0, 1.45), (0.25, 0.11, 0.11), "Synth_Green"),
+    ("Hand.L", (0.765, 0, 1.45), (0.1, 0.09, 0.09), "Synth_Red"),
+    ("Shoulder.R", (-0.13, 0, 1.45), (0.13, 0.17, 0.15), "Synth_Green"),
+    ("UpperArm.R", (-0.325, 0, 1.45), (0.26, 0.12, 0.12), "Synth_Green"),
+    ("LowerArm.R", (-0.585, 0, 1.45), (0.25, 0.11, 0.11), "Synth_Green"),
+    ("Hand.R", (-0.765, 0, 1.45), (0.1, 0.09, 0.09), "Synth_Red"),
+    ("UpperLeg.L", (0.1, 0, 0.735), (0.14, 0.15, 0.43), "Synth_Green"),
+    ("LowerLeg.L", (0.1, 0, 0.31), (0.13, 0.14, 0.42), "Synth_Green"),
+    ("Foot.L", (0.1, -0.05, 0.05), (0.12, 0.25, 0.1), "Synth_Red"),
+    ("UpperLeg.R", (-0.1, 0, 0.735), (0.14, 0.15, 0.43), "Synth_Green"),
+    ("LowerLeg.R", (-0.1, 0, 0.31), (0.13, 0.14, 0.42), "Synth_Green"),
+    ("Foot.R", (-0.1, -0.05, 0.05), (0.12, 0.25, 0.1), "Synth_Red"),
+]
+
+# ----------------------------------------------------------------------------- Ant-Man
+# Built at normal size; Shrink/Giant scale is applied at runtime by FighterView.
+
+ANT_MAN_COLORS = {
+    "Suit_Red": (0.6, 0.06, 0.06), "Suit_Black": (0.07, 0.07, 0.08), "Helmet_Silver": (0.62, 0.64, 0.68),
+    "Lens_Red": (0.95, 0.15, 0.1), "Pym_Blue": (0.2, 0.55, 1.0),
+}
+
+ANT_MAN_PARTS = [
+    ("Hips", (0, 0, 1.0), (0.34, 0.21, 0.16), "Suit_Black"),
+    ("Hips", (0, -0.11, 1.03), (0.12, 0.02, 0.07), "Helmet_Silver"),      # belt buckle
+    ("Hips", (0.15, -0.06, 1.0), (0.04, 0.04, 0.06), "Pym_Blue"),         # Pym particle canisters
+    ("Hips", (-0.15, -0.06, 1.0), (0.04, 0.04, 0.06), "Lens_Red"),
+    ("Spine", (0, 0, 1.19), (0.31, 0.19, 0.18), "Suit_Red"),
+    ("Chest", (0, 0, 1.39), (0.42, 0.24, 0.24), "Suit_Red"),
+    ("Chest", (0, -0.125, 1.39), (0.22, 0.02, 0.2), "Suit_Black"),       # chest panel
+    ("Chest", (0, 0.13, 1.4), (0.24, 0.06, 0.26), "Helmet_Silver"),      # backpack regulator
+    ("Neck", (0, 0, 1.55), (0.1, 0.1, 0.1), "Suit_Black"),
+    ("Head", (0, 0, 1.73), (0.24, 0.26, 0.27), "Helmet_Silver"),
+    ("Head", (0, -0.13, 1.66), (0.14, 0.02, 0.06), "Suit_Black"),        # mouth grille
+    ("Head", (0.05, -0.133, 1.75), (0.07, 0.01, 0.06), "Lens_Red"),
+    ("Head", (-0.05, -0.133, 1.75), (0.07, 0.01, 0.06), "Lens_Red"),
+    ("Head", (0.1, -0.04, 1.92), (0.02, 0.02, 0.14), "Helmet_Silver"),   # antennae
+    ("Head", (-0.1, -0.04, 1.92), (0.02, 0.02, 0.14), "Helmet_Silver"),
+    ("Shoulder.L", (0.13, 0, 1.45), (0.14, 0.18, 0.16), "Suit_Black"),
+    ("UpperArm.L", (0.325, 0, 1.45), (0.27, 0.12, 0.12), "Suit_Red"),
+    ("LowerArm.L", (0.585, 0, 1.45), (0.25, 0.12, 0.12), "Suit_Black"),
+    ("Hand.L", (0.765, 0, 1.45), (0.1, 0.1, 0.1), "Suit_Black"),
+    ("Hand.L", (0.68, -0.06, 1.47), (0.06, 0.02, 0.04), "Pym_Blue"),     # size-change switches
+    ("Shoulder.R", (-0.13, 0, 1.45), (0.14, 0.18, 0.16), "Suit_Black"),
+    ("UpperArm.R", (-0.325, 0, 1.45), (0.27, 0.12, 0.12), "Suit_Red"),
+    ("LowerArm.R", (-0.585, 0, 1.45), (0.25, 0.12, 0.12), "Suit_Black"),
+    ("Hand.R", (-0.765, 0, 1.45), (0.1, 0.1, 0.1), "Suit_Black"),
+    ("Hand.R", (-0.68, -0.06, 1.47), (0.06, 0.02, 0.04), "Lens_Red"),
+    ("UpperLeg.L", (0.11, 0, 0.735), (0.15, 0.16, 0.43), "Suit_Red"),
+    ("LowerLeg.L", (0.11, 0, 0.31), (0.14, 0.15, 0.42), "Suit_Black"),
+    ("Foot.L", (0.11, -0.05, 0.05), (0.13, 0.26, 0.1), "Suit_Black"),
+    ("UpperLeg.R", (-0.11, 0, 0.735), (0.15, 0.16, 0.43), "Suit_Red"),
+    ("LowerLeg.R", (-0.11, 0, 0.31), (0.14, 0.15, 0.42), "Suit_Black"),
+    ("Foot.R", (-0.11, -0.05, 0.05), (0.13, 0.26, 0.1), "Suit_Black"),
 ]
 
 
@@ -307,6 +428,28 @@ POSES = {
                   Hand_L=[("Z", 60)], Hand_R=[("Z", -60)], UpperLeg_L=leg("L", -5, 3), UpperLeg_R=leg("R", 5, 3), LowerLeg_L=[("X", 15)]),
     "fly_dive": dict(READY, Root=[("X", 70)], UpperArm_L=arm("L", 80, -60), UpperArm_R=arm("R", 80, -60), LowerArm_L=[], LowerArm_R=[],
                      UpperLeg_L=leg("L", -10, 2), UpperLeg_R=leg("R", -10, 2), root_z=0.3),
+    # Hulk / Vision / Ant-Man
+    "clap": dict(READY, UpperArm_L=reach("L", 10), UpperArm_R=reach("R", 10), LowerArm_L=bend("L", 25), LowerArm_R=bend("R", 25),
+                 Chest=[("X", 12)], UpperLeg_L=leg("L", 20), LowerLeg_L=[("X", 30)], root_z=-0.06),
+    "clap_open": dict(READY, UpperArm_L=arm("L", 10), UpperArm_R=arm("R", 10), LowerArm_L=[], LowerArm_R=[], Chest=[("X", -12)]),
+    "stomp_up": dict(READY, UpperLeg_R=leg("R", 75), LowerLeg_R=[("X", 80)], UpperArm_L=arm("L", 40, 10), UpperArm_R=arm("R", 40, 10),
+                     Chest=[("X", -8)]),
+    "stomp": dict(READY, UpperLeg_R=leg("R", 20), LowerLeg_R=[("X", 10)], UpperLeg_L=leg("L", -10), LowerLeg_L=[("X", 40)],
+                  UpperArm_L=arm("L", 75, -10), UpperArm_R=arm("R", 75, -10), Chest=[("X", 25)], root_z=-0.12),
+    "lift": dict(READY, UpperArm_L=arm("L", -70), UpperArm_R=arm("R", -70), LowerArm_L=[], LowerArm_R=[],
+                 Chest=[("X", -15)], UpperLeg_L=leg("L", 10, 14), UpperLeg_R=leg("R", 10, 14), root_z=-0.05),
+    "roar": dict(READY, UpperArm_L=arm("L", 20, -30), UpperArm_R=arm("R", 20, -30), LowerArm_L=bend("L", 80), LowerArm_R=bend("R", 80),
+                 Chest=[("X", -18)], Head=[("X", -25)], UpperLeg_L=leg("L", 0, 16), UpperLeg_R=leg("R", 0, 16), root_z=-0.06),
+    "gem_charge": dict(READY, UpperArm_L=arm("L", 75, -25), UpperArm_R=arm("R", 75, -25), LowerArm_L=[], LowerArm_R=[],
+                       Chest=[("X", -10)], Head=[("X", -12)]),
+    "gem_beam": dict(READY, UpperArm_L=arm("L", 60, -45), UpperArm_R=arm("R", 60, -45), LowerArm_L=[], LowerArm_R=[],
+                     Chest=[("X", 14)], Head=[("X", 10)], UpperLeg_L=leg("L", 15), UpperLeg_R=leg("R", -15)),
+    "float": dict(READY, UpperArm_L=arm("L", 65, 10), UpperArm_R=arm("R", 65, 10), LowerArm_L=bend("L", 25), LowerArm_R=bend("R", 25),
+                  UpperLeg_L=leg("L", 10, 3), UpperLeg_R=leg("R", -4, 3), LowerLeg_L=[("X", 25)], LowerLeg_R=[("X", 10)]),
+    "phase_lunge": dict(READY, UpperArm_R=reach("R", 0), LowerArm_R=[], UpperArm_L=arm("L", 75, -30), Chest=[("Z", -25), ("X", 18)],
+                        UpperLeg_L=leg("L", 40), LowerLeg_L=[("X", 40)], UpperLeg_R=leg("R", -30), root_z=-0.1),
+    "flex": dict(READY, UpperArm_L=arm("L", -10), UpperArm_R=arm("R", -10), LowerArm_L=[("Y", -100)], LowerArm_R=[("Y", 100)],
+                 Chest=[("X", -6)], UpperLeg_L=leg("L", 0, 12), UpperLeg_R=leg("R", 0, 12)),
     "land": dict(READY, UpperLeg_L=leg("L", 45), LowerLeg_L=[("X", 70)], UpperLeg_R=leg("R", 45), LowerLeg_R=[("X", 70)],
                  Chest=[("X", 15)], root_z=-0.22),
 }
@@ -335,12 +478,52 @@ IRON_MAN_MOVE_POSES = {
     "Iron Legion": ("salute", "power"), "Jet Toss": ("block", "throw"),
 }
 
-# Each proxy: palette, armor boxes, extra Prop_ bones, extra geometry, signature poses, mode overrides.
+HULK_MOVE_POSES = {
+    "Hammer Fist": ("windup_r", "punch_r"), "Backhand": ("windup_l", "punch_l"), "Double Axe Handle": ("overhead", "slam"),
+    "Gamma Haymaker": ("windup_r", "punch_r"), "Hulk Uppercut": ("crouch", "uppercut"), "Gamma Charge": ("windup_l", "bash"),
+    "Stomp": ("stomp_up", "stomp"), "Air Smash": ("air_tuck", "air_punch"), "Meteor Drop": ("overhead", "slam"),
+    "Boulder Toss": ("lift", "throw"), "Gamma Leap": ("crouch", "jump"), "Thunderclap": ("clap_open", "clap"),
+    "Shoulder Barge": ("windup_l", "bash"), "Ground Clap": ("overhead", "slam"), "Gamma Wave": ("overhead", "slam"),
+    "Smash Flurry": ("punch_l", "punch_r"), "Earthshaker Leap": ("crouch", "slam"), "Car Fists": ("lift", "clap"),
+    "Gamma Crush": ("lift", "slam"), "World Breaker Smash": ("roar", "slam"), "Gamma Rage": ("flex", "roar"),
+    "World Breaker Throw": ("lift", "throw"), "Savage Slam": ("lift", "slam"), "Gamma Toss": ("block", "throw"),
+}
+
+VISION_MOVE_POSES = {
+    "Synthezoid Jab": ("windup_l", "punch_l"), "Synthezoid Cross": ("windup_r", "punch_r"), "Phase Backfist": ("windup_l", "phase_lunge"),
+    "Solid Palm": ("windup_r", "palm_r"), "Density Uppercut": ("crouch", "uppercut"), "Solid Lance": ("windup_r", "phase_lunge"),
+    "Phase Sweep": ("crouch", "sweep"), "Air Phase Strike": ("float", "air_punch"), "Air Solar Kick": ("air_tuck", "kick_r"),
+    "Diamond Dive": ("overhead", "fly_dive"), "Mind Stone Beam": ("gem_charge", "gem_beam"), "Ascension": ("crouch", "float"),
+    "Phase Drop": ("float", "slam"), "Intangible Rush": ("float", "phase_lunge"), "Solar Lances": ("gem_charge", "palms"),
+    "Diamond Hammer": ("overhead", "slam"), "Phantom Flight": ("float", "fly_dive"), "Mind Stone Pulse": ("gem_charge", "power"),
+    "Synthezoid Overdrive": ("float", "power"), "Mind Stone Solar Beam": ("gem_charge", "gem_beam"), "Phase Field": ("float", "power"),
+    "Density Throw": ("block", "throw"),
+}
+
+ANT_MAN_MOVE_POSES = {
+    "Quick Jab": ("windup_l", "punch_l"), "Quick Hook": ("windup_r", "punch_r"), "Shrink Dash Punch": ("crouch", "phase_lunge"),
+    "Pym Haymaker": ("windup_r", "punch_r"), "Growth Spurt": ("crouch", "uppercut"), "Giant Shoulder": ("windup_l", "bash"),
+    "Ant Sweep": ("crouch", "sweep"), "Ant Kick": ("air_tuck", "kick_r"), "Pinball Kick": ("air_tuck", "kick_r"),
+    "Size Drop": ("overhead", "slam"), "Red Disc": ("throw_back", "throw"), "Blue Disc": ("throw_back", "throw"),
+    "Flying Ant Mount": ("crouch", "float"), "Ant Swarm": ("ready", "power"), "Pinball": ("roll", "phase_lunge"),
+    "Giant Stomp": ("stomp_up", "stomp"), "Quantum Dive": ("overhead", "fly_dive"), "Colony Call": ("salute", "power"),
+    "Giant-Man Rampage": ("stomp_up", "stomp"), "Giant-Man": ("crouch", "flex"), "Quantum Tunnel": ("block", "power"),
+    "Pym Toss": ("block", "throw"),
+}
+
+# Each proxy: palette, armor boxes, extra Prop_ bones, extra geometry, signature poses, mode overrides,
+# and an optional uniform scale so the model matches the simulation's body height.
 LOOKS = {
     "captain_america": dict(colors=CAP_COLORS, parts=CAP_PARTS, prop_bones=CAP_PROP_BONES, extras=cap_shield,
                             move_poses=CAP_MOVE_POSES, mode_poses={}),
     "iron_man": dict(colors=IRON_MAN_COLORS, parts=IRON_MAN_PARTS, prop_bones={}, extras=None,
                      move_poses=IRON_MAN_MOVE_POSES, mode_poses={"Airborne": "hover", "Taunt": "power"}),
+    "hulk": dict(colors=HULK_COLORS, parts=HULK_PARTS, prop_bones={}, extras=None, scale=1.3,
+                 move_poses=HULK_MOVE_POSES, mode_poses={"Taunt": "roar"}),
+    "vision": dict(colors=VISION_COLORS, parts=VISION_PARTS, prop_bones={}, extras=None,
+                   move_poses=VISION_MOVE_POSES, mode_poses={"Airborne": "float", "Taunt": "gem_charge"}),
+    "ant_man": dict(colors=ANT_MAN_COLORS, parts=ANT_MAN_PARTS, prop_bones={}, extras=None, scale=0.95,
+                    move_poses=ANT_MAN_MOVE_POSES, mode_poses={"Taunt": "flex"}),
 }
 
 
@@ -362,6 +545,9 @@ def poses_for(move, look):
 
 # ----------------------------------------------------------------------------- animation
 
+SCALE = 1.0  # the current look's uniform scale; pose heights (root_z) are authored at 1.0
+
+
 def resolve(rig, p):
     """Pose dict of (axis, deg) lists -> {bone: quaternion} plus root height."""
     out = {}
@@ -370,7 +556,7 @@ def resolve(rig, p):
             continue
         name = bone_name(bone)
         out[name] = rp.rest_relative(rig.pose.bones[name], rots)
-    return out, p.get("root_z", 0.0)
+    return out, p.get("root_z", 0.0) * SCALE
 
 
 def sample_keys(total, step, extra=()):
@@ -436,14 +622,26 @@ def mode_clip(rig, name, length, look):
 
 # ----------------------------------------------------------------------------- main
 
+def scaled(look, bones):
+    """Applies the look's uniform scale to the skeleton and the box parts."""
+    k = look.get("scale", 1.0)
+    mul = lambda v: tuple(c * k for c in v)
+    bones = {b: (mul(h), mul(t), parent) for b, (h, t, parent) in bones.items()}
+    look = dict(look, parts=[(b, mul(c), mul(size), m) for b, c, size, m in look["parts"]])
+    return look, bones
+
+
 def build(hero_slug):
+    global SCALE
     data = rp.load_frame_data(hero_slug)
     rp.reset_scene()
     rig_name = hero_slug.title().replace("_", "") + "_Rig"
     if hero_slug not in LOOKS:
         raise SystemExit("No proxy look for %s; add one to LOOKS" % hero_slug)
-    look = LOOKS[hero_slug]
-    bones = dict(BONES, **look["prop_bones"])
+    look, bones = scaled(LOOKS[hero_slug], dict(BONES, **LOOKS[hero_slug]["prop_bones"]))
+    if look.get("extras") and look.get("scale", 1.0) != 1.0:
+        raise SystemExit("extras geometry is authored at scale 1; scale it before using it with a scaled look")
+    SCALE = look.get("scale", 1.0)
     rig = build_rig(rig_name, bones)
     build_mesh(rig, hero_slug.title().replace("_", ""), look, bones)
     rig.animation_data_create()

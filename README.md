@@ -13,7 +13,7 @@ There is no character art yet; heroes appear as capsules colored per player.
 
 1. Open the folder with **Unity 6 LTS (6000.0.x)**. The packages in `Packages/manifest.json` resolve automatically.
 2. For URP, assign a URP asset under *Project Settings → Graphics* (or create the project from the **Universal 3D** template and copy `Assets/` and `Packages/` in). Without one, the graybox renders with the built-in pipeline.
-3. Run **Reforged → Build Graybox Test Room**. This generates the scene, prefabs, and materials from the simulation's own stage definition. It also exports the roster to editable HeroAssets, and picks up Captain America's Blender proxy and the pre-fractured props if they're in `Assets/_Project/Art`.
+3. Run **Reforged → Build Graybox Test Room**. This generates the scene, prefabs, and materials from the simulation's own stage definition. It also exports the roster to editable HeroAssets, and picks up the heroes' Blender proxies and the pre-fractured props if they're in `Assets/_Project/Art`.
 4. Press **Play**. Press any button on a gamepad (or any gameplay key) to join, then pick a hero and an Assist Callout partner on the **character select** screen:
    - ←/→ to browse
    - **A** (K) to confirm
@@ -103,7 +103,7 @@ Art flows from Blender through validated FBX files, with no manual import settin
 | Step | Command | Output |
 |---|---|---|
 | 1. Export frame data from the sim | `dotnet run --project Tools/FrameData` | `Docs/FrameData/*.json`, `Docs/MoveList.md` |
-| 2. Build a hero proxy (rig, mesh, every animation) | `python Tools/Blender/build_proxy_hero.py captain_america` (or `iron_man`) | `Art/Characters/<hero>/<hero>.fbx`, `ArtSource/Characters/<hero>_proxy.blend` |
+| 2. Build a hero proxy (rig, mesh, every animation) | `python Tools/Blender/build_proxy_hero.py captain_america` (or `iron_man`, `hulk`, `vision`, `ant_man`) | `Art/Characters/<hero>/<hero>.fbx`, `ArtSource/Characters/<hero>_proxy.blend` |
 | 3. Build pre-fractured props | `python Tools/Blender/build_fractured_props.py` | `Art/Props/<prop>_intact.fbx`, `<prop>_fractured.fbx` |
 | Artists: validate and export a real model | `blender -b hero.blend -P Tools/Blender/export_hero.py -- captain_america` | Fails with a list of problems, or writes the FBX |
 
@@ -122,10 +122,15 @@ The validator was checked against a deliberately broken file: it reports a renam
 - `SimAnimationDriver` plays clips as a function of sim state: the clip is the current move, and the time is the sim's `MoveFrame`. Animation can't drift from hitboxes, hitstop freezes it, and rollback re-renders it correctly.
 - The `HeroAsset` inspector warns about any move without a clip, or whose clip length doesn't match its frame data.
 
-Each proxy is an entry in `LOOKS` (`build_proxy_hero.py`): a palette, armor boxes, extra `Prop_` bones, and signature poses on the shared rig. Adding a hero's proxy means adding one entry.
+Each proxy is an entry in `LOOKS` (`build_proxy_hero.py`): a palette, armor boxes, extra `Prop_` bones, and signature poses on the shared rig. Adding a hero's proxy means adding one entry; an optional `scale` sizes the whole rig to the simulation's body height (Hulk is 1.3x).
+
+![Proxy lineup at game scale](Docs/Images/proxy_lineup.png)
 
 ![Captain America proxy poses](Docs/Images/cap_proxy_poses.png)
 ![Iron Man proxy poses](Docs/Images/iron_man_proxy_poses.png)
+![Hulk proxy poses](Docs/Images/hulk_proxy_poses.png)
+![Vision proxy poses](Docs/Images/vision_proxy_poses.png)
+![Ant-Man proxy poses](Docs/Images/ant_man_proxy_poses.png)
 
 ## Toon shader
 
@@ -170,7 +175,7 @@ Assets/_Project/
   Scripts/Game/       Unity runtime: GameSession (lobby + 60 Hz tick), input bridge, views, sim-driven animation, authoring, presentation
   Scripts/Editor/     Scene builder, roster exporter, HeroAsset inspector, model import rules
   Shaders/            Reforged/Toon (URP): cel steps, halftone, rim, impact-reactive ink outline
-  Art/Characters/     Hero FBX from the Blender pipeline (Captain America proxy)
+  Art/Characters/     Hero FBX from the Blender pipeline (five proxies)
   Art/Props/          Intact + pre-fractured prop FBX (crate, car, drywall, weak floor)
   Tests/EditMode/     NUnit tests (Unity Test Runner + dotnet)
   Input/              ReforgedControls.inputactions (gamepad + keyboard)
@@ -196,14 +201,13 @@ Docs/DESIGN.md        Game design document
 - Assist callouts and relay, two Ultimates plus the Team Ultimate
 - Character select with assist-partner picking, and two assist-only cameos
 - **Hero mechanics:** Heat (Iron Man), Rage (Hulk), Density (Vision), Size (Ant-Man), with graybox kits for Hulk, Vision and Ant-Man
-- **Blender pipeline:** validated rig and animation contract; proxies for **Captain America (40 clips) and Iron Man (29 clips)**; pre-fractured props
+- **Blender pipeline:** validated rig and animation contract; proxies for **Captain America (40 clips), Iron Man (29), Hulk (36), Vision (34) and Ant-Man (34)**; pre-fractured props
 - Sim-driven animation playback
 - Toon/halftone/ink shader that also shows mechanic state (phase, diamond, heat, World Breaker glows; size and rage scaling)
 - Graybox scene generator, debug HUD with mechanic meters, hitbox overlay, onomatopoeia feedback
 
 **Next:**
 - Online transport (Steam or EOS) feeding `RollbackSession`
-- Proxies for Hulk, Vision and Ant-Man (one `LOOKS` entry each)
 - Thor, Black Widow, Hawkeye, Black Panther and Captain Marvel kits and mechanics
 - VFX Graph library, and a real sculpted Cap through `export_hero.py`
 - The camera Rally prompt

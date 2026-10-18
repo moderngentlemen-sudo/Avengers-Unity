@@ -355,7 +355,7 @@ CameraDirector (Cinemachine target group)                              └ SaveS
 | Phase | Duration | Deliverable | Status |
 |---|---|---|---|
 | Pre-production | 3 mo | Deterministic combat core, rollback, tools, graybox, art pipeline | **Done** (see README) |
-| Vertical Slice | 4 mo | Cap + Iron Man, 1 multi-level stage with destruction, 2P local | In progress: graybox playable, character select, Cap + Iron Man proxies animated, toon shader, all four hero mechanics (Heat, Rage, Density, Size) with graybox Hulk/Vision/Ant-Man |
+| Vertical Slice | 4 mo | Cap + Iron Man, 1 multi-level stage with destruction, 2P local | In progress: graybox playable, character select, Cap, Iron Man, Hulk, Vision and Ant-Man proxies animated, toon shader, all four hero mechanics (Heat, Rage, Density, Size) |
 | Production A | 8 mo | 6 heroes, 5 stages, 4P local, online rollback | — |
 | Production B | 7 mo | All 10 heroes, both Ultimates each, modes, team-ups | — |
 | Polish/Cert | 6 mo | Balance, accessibility, performance, certification | — |
