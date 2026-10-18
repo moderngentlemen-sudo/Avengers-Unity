@@ -1,0 +1,73 @@
+{
+  "hero": "War Machine",
+  "fps": 60,
+  "assistOnly": true,
+  "bodyHeight": 1.7999878,
+  "assistMoves": [
+    "Shoulder Cannon",
+    "Missile Barrage",
+    "Gatling Sweep"
+  ],
+  "moves": [
+    {
+      "name": "Shoulder Cannon",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 12,
+      "active": 1,
+      "recovery": 16,
+      "total": 29,
+      "activeStart": 13,
+      "activeEnd": 13,
+      "damage": 60,
+      "flags": "WallBounce",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Missile Barrage",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 14,
+      "active": 1,
+      "recovery": 18,
+      "total": 33,
+      "activeStart": 15,
+      "activeEnd": 15,
+      "damage": 30,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Gatling Sweep",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 10,
+      "active": 24,
+      "recovery": 12,
+      "total": 46,
+      "activeStart": 11,
+      "activeEnd": 34,
+      "damage": 12,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    }
+  ]
+}

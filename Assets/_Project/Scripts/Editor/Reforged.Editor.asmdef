@@ -1,0 +1,10 @@
+{
+    "name": "Reforged.Editor",
+    "rootNamespace": "Reforged.EditorTools",
+    "references": ["Reforged.Sim", "Reforged.Game", "Unity.InputSystem", "Unity.Cinemachine"],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "autoReferenced": false,
+    "noEngineReferences": false
+}

@@ -1,0 +1,10 @@
+{
+    "name": "Reforged.Game",
+    "rootNamespace": "Reforged.Game",
+    "references": ["Reforged.Sim", "Unity.InputSystem", "Unity.Cinemachine"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "autoReferenced": true,
+    "noEngineReferences": false
+}

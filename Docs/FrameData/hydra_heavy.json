@@ -1,0 +1,29 @@
+{
+  "hero": "Hydra Heavy",
+  "fps": 60,
+  "assistOnly": false,
+  "bodyHeight": 2.1999817,
+  "assistMoves": [],
+  "moves": [
+    {
+      "name": "Heavy Swing",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 16,
+      "active": 4,
+      "recovery": 28,
+      "total": 48,
+      "activeStart": 17,
+      "activeEnd": 20,
+      "damage": 90,
+      "flags": "SuperArmor",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    }
+  ]
+}

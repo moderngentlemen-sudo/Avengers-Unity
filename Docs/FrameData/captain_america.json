@@ -1,0 +1,573 @@
+{
+  "hero": "Captain America",
+  "fps": 60,
+  "assistOnly": false,
+  "bodyHeight": 1.7999878,
+  "assistMoves": [
+    "Charging Star",
+    "Shield Toss",
+    "Rising Shield Slash"
+  ],
+  "moves": [
+    {
+      "name": "Jab",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 4,
+      "active": 2,
+      "recovery": 10,
+      "total": 16,
+      "activeStart": 5,
+      "activeEnd": 6,
+      "damage": 30,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Cross",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 5,
+      "active": 2,
+      "recovery": 12,
+      "total": 19,
+      "activeStart": 6,
+      "activeEnd": 7,
+      "damage": 35,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Shield Bash",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 6,
+      "active": 3,
+      "recovery": 14,
+      "total": 23,
+      "activeStart": 7,
+      "activeEnd": 9,
+      "damage": 45,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.05999756,
+        0
+      ]
+    },
+    {
+      "name": "Liberty Kick",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 8,
+      "active": 3,
+      "recovery": 20,
+      "total": 31,
+      "activeStart": 9,
+      "activeEnd": 11,
+      "damage": 70,
+      "flags": "WallBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0.05999756,
+        0
+      ]
+    },
+    {
+      "name": "Step-In Elbow",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 6,
+      "active": 3,
+      "recovery": 14,
+      "total": 23,
+      "activeStart": 7,
+      "activeEnd": 9,
+      "damage": 40,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.13999939,
+        0
+      ]
+    },
+    {
+      "name": "Low Shield Sweep",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 6,
+      "active": 3,
+      "recovery": 14,
+      "total": 23,
+      "activeStart": 7,
+      "activeEnd": 9,
+      "damage": 35,
+      "flags": "OTG",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Haymaker",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 10,
+      "active": 3,
+      "recovery": 18,
+      "total": 31,
+      "activeStart": 11,
+      "activeEnd": 13,
+      "damage": 85,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Star-Spangled Uppercut",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Up",
+      "aerial": false,
+      "startup": 9,
+      "active": 4,
+      "recovery": 22,
+      "total": 35,
+      "activeStart": 10,
+      "activeEnd": 13,
+      "damage": 80,
+      "flags": "Launcher",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Shield Charge",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 12,
+      "active": 6,
+      "recovery": 20,
+      "total": 38,
+      "activeStart": 13,
+      "activeEnd": 18,
+      "damage": 90,
+      "flags": "WallBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0.25,
+        0
+      ]
+    },
+    {
+      "name": "Shield Sweep",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 10,
+      "active": 4,
+      "recovery": 22,
+      "total": 36,
+      "activeStart": 11,
+      "activeEnd": 14,
+      "damage": 70,
+      "flags": "OTG",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Air Jab",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 4,
+      "active": 3,
+      "recovery": 10,
+      "total": 17,
+      "activeStart": 5,
+      "activeEnd": 7,
+      "damage": 30,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Air Shield Swipe",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 5,
+      "active": 3,
+      "recovery": 12,
+      "total": 20,
+      "activeStart": 6,
+      "activeEnd": 8,
+      "damage": 35,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Air Hammer Kick",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 7,
+      "active": 3,
+      "recovery": 16,
+      "total": 26,
+      "activeStart": 8,
+      "activeEnd": 10,
+      "damage": 50,
+      "flags": "GroundBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Aerial Shield Spike",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 9,
+      "active": 4,
+      "recovery": 18,
+      "total": 31,
+      "activeStart": 10,
+      "activeEnd": 13,
+      "damage": 80,
+      "flags": "GroundBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Shield Drop",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Down",
+      "aerial": true,
+      "startup": 8,
+      "active": 24,
+      "recovery": 10,
+      "total": 42,
+      "activeStart": 9,
+      "activeEnd": 32,
+      "damage": 70,
+      "flags": "OTG, FloorBreak",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        -0.3999939
+      ]
+    },
+    {
+      "name": "Shield Toss",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 10,
+      "active": 1,
+      "recovery": 18,
+      "total": 29,
+      "activeStart": 11,
+      "activeEnd": 11,
+      "damage": 55,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Air Shield Toss",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 8,
+      "active": 1,
+      "recovery": 16,
+      "total": 25,
+      "activeStart": 9,
+      "activeEnd": 9,
+      "damage": 50,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Rising Shield Slash",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Up",
+      "aerial": false,
+      "startup": 6,
+      "active": 6,
+      "recovery": 24,
+      "total": 36,
+      "activeStart": 7,
+      "activeEnd": 12,
+      "damage": 90,
+      "flags": "Launcher, CeilingBounce, Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0.039993286,
+        0.23999023
+      ]
+    },
+    {
+      "name": "Shield Plant",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 4,
+      "active": 14,
+      "recovery": 14,
+      "total": 32,
+      "activeStart": 5,
+      "activeEnd": 18,
+      "damage": 60,
+      "flags": "SuperArmor",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Charging Star",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 8,
+      "active": 8,
+      "recovery": 14,
+      "total": 30,
+      "activeStart": 9,
+      "activeEnd": 16,
+      "damage": 60,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.31999207,
+        0
+      ]
+    },
+    {
+      "name": "Shield Slingshot",
+      "tier": "HeroSpecial",
+      "input": "HeroLight",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 10,
+      "active": 1,
+      "recovery": 16,
+      "total": 27,
+      "activeStart": 11,
+      "activeEnd": 11,
+      "damage": 60,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Brooklyn Brawl",
+      "tier": "HeroSpecial",
+      "input": "HeroHeavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 6,
+      "active": 30,
+      "recovery": 18,
+      "total": 54,
+      "activeStart": 7,
+      "activeEnd": 36,
+      "damage": 18,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Leap of Liberty",
+      "tier": "HeroSpecial",
+      "input": "HeroJump",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 10,
+      "active": 20,
+      "recovery": 16,
+      "total": 46,
+      "activeStart": 11,
+      "activeEnd": 30,
+      "damage": 120,
+      "flags": "GroundBounce, FloorBreak",
+      "projectile": false,
+      "selfVelocity": [
+        0.17999268,
+        0.2599945
+      ]
+    },
+    {
+      "name": "Rally Cry",
+      "tier": "HeroSpecial",
+      "input": "HeroSpecial",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 20,
+      "active": 1,
+      "recovery": 20,
+      "total": 41,
+      "activeStart": 21,
+      "activeEnd": 21,
+      "damage": 40,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Shield of Freedom",
+      "tier": "Super",
+      "input": "Super",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 20,
+      "active": 1,
+      "recovery": 24,
+      "total": 45,
+      "activeStart": 21,
+      "activeEnd": 21,
+      "damage": 80,
+      "flags": "Invulnerable",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Avengers Assemble",
+      "tier": "Ultimate",
+      "input": "UltimateI",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 30,
+      "active": 40,
+      "recovery": 30,
+      "total": 100,
+      "activeStart": 31,
+      "activeEnd": 70,
+      "damage": 60,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Star-Spangled Stand",
+      "tier": "Ultimate",
+      "input": "UltimateII",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 25,
+      "active": 10,
+      "recovery": 25,
+      "total": 60,
+      "activeStart": 26,
+      "activeEnd": 35,
+      "damage": 120,
+      "flags": "Launcher, Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Shoulder Toss",
+      "tier": "Heavy",
+      "input": "Grab",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 5,
+      "active": 2,
+      "recovery": 20,
+      "total": 27,
+      "activeStart": 6,
+      "activeEnd": 7,
+      "damage": 90,
+      "flags": "WallBounce, Unblockable, DirectionalThrow",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    }
+  ]
+}

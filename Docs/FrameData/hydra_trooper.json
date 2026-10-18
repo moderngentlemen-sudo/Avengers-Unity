@@ -1,0 +1,49 @@
+{
+  "hero": "Hydra Trooper",
+  "fps": 60,
+  "assistOnly": false,
+  "bodyHeight": 1.7999878,
+  "assistMoves": [],
+  "moves": [
+    {
+      "name": "Trooper Jab",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 8,
+      "active": 3,
+      "recovery": 20,
+      "total": 31,
+      "activeStart": 9,
+      "activeEnd": 11,
+      "damage": 40,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Rifle Butt",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 14,
+      "active": 3,
+      "recovery": 24,
+      "total": 41,
+      "activeStart": 15,
+      "activeEnd": 17,
+      "damage": 70,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    }
+  ]
+}

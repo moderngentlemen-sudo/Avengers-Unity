@@ -1,0 +1,353 @@
+{
+  "hero": "Iron Man",
+  "fps": 60,
+  "assistOnly": false,
+  "bodyHeight": 1.7999878,
+  "assistMoves": [
+    "Repulsor Blast",
+    "Unibeam Burst",
+    "Boot-Jet Launcher"
+  ],
+  "moves": [
+    {
+      "name": "Gauntlet Jab",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 4,
+      "active": 2,
+      "recovery": 10,
+      "total": 16,
+      "activeStart": 5,
+      "activeEnd": 6,
+      "damage": 28,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Repulsor Palm",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 6,
+      "active": 3,
+      "recovery": 12,
+      "total": 21,
+      "activeStart": 7,
+      "activeEnd": 9,
+      "damage": 40,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Thruster Kick",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 8,
+      "active": 3,
+      "recovery": 18,
+      "total": 29,
+      "activeStart": 9,
+      "activeEnd": 11,
+      "damage": 65,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Unibeam Burst",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 12,
+      "active": 4,
+      "recovery": 18,
+      "total": 34,
+      "activeStart": 13,
+      "activeEnd": 16,
+      "damage": 85,
+      "flags": "WallBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Boot-Jet Launcher",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Up",
+      "aerial": false,
+      "startup": 9,
+      "active": 4,
+      "recovery": 20,
+      "total": 33,
+      "activeStart": 10,
+      "activeEnd": 13,
+      "damage": 75,
+      "flags": "Launcher",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0.19999695
+      ]
+    },
+    {
+      "name": "Air Palm",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 4,
+      "active": 3,
+      "recovery": 10,
+      "total": 17,
+      "activeStart": 5,
+      "activeEnd": 7,
+      "damage": 30,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Air Thruster Spin",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 6,
+      "active": 6,
+      "recovery": 14,
+      "total": 26,
+      "activeStart": 7,
+      "activeEnd": 12,
+      "damage": 45,
+      "flags": "GroundBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Repulsor Blast",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 9,
+      "active": 1,
+      "recovery": 16,
+      "total": 26,
+      "activeStart": 10,
+      "activeEnd": 10,
+      "damage": 50,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Smart Missiles",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 12,
+      "active": 1,
+      "recovery": 20,
+      "total": 33,
+      "activeStart": 13,
+      "activeEnd": 13,
+      "damage": 40,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Repulsor Barrage",
+      "tier": "HeroSpecial",
+      "input": "HeroHeavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 8,
+      "active": 24,
+      "recovery": 16,
+      "total": 48,
+      "activeStart": 9,
+      "activeEnd": 32,
+      "damage": 20,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Pulse Bolts",
+      "tier": "HeroSpecial",
+      "input": "HeroLight",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 10,
+      "active": 1,
+      "recovery": 16,
+      "total": 27,
+      "activeStart": 11,
+      "activeEnd": 11,
+      "damage": 55,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Afterburner Dive",
+      "tier": "HeroSpecial",
+      "input": "HeroJump",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 12,
+      "active": 22,
+      "recovery": 16,
+      "total": 50,
+      "activeStart": 13,
+      "activeEnd": 34,
+      "damage": 110,
+      "flags": "GroundBounce, FloorBreak",
+      "projectile": false,
+      "selfVelocity": [
+        0.23999023,
+        0.21998596
+      ]
+    },
+    {
+      "name": "Overclock Protocol",
+      "tier": "HeroSpecial",
+      "input": "HeroSpecial",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 16,
+      "active": 6,
+      "recovery": 18,
+      "total": 40,
+      "activeStart": 17,
+      "activeEnd": 22,
+      "damage": 40,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Unibeam",
+      "tier": "Super",
+      "input": "Super",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 18,
+      "active": 30,
+      "recovery": 20,
+      "total": 68,
+      "activeStart": 19,
+      "activeEnd": 48,
+      "damage": 30,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Proton Cannon",
+      "tier": "Ultimate",
+      "input": "UltimateI",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 30,
+      "active": 45,
+      "recovery": 30,
+      "total": 105,
+      "activeStart": 31,
+      "activeEnd": 75,
+      "damage": 40,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Iron Legion",
+      "tier": "Ultimate",
+      "input": "UltimateII",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 25,
+      "active": 60,
+      "recovery": 25,
+      "total": 110,
+      "activeStart": 26,
+      "activeEnd": 85,
+      "damage": 45,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Jet Toss",
+      "tier": "Heavy",
+      "input": "Grab",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 5,
+      "active": 2,
+      "recovery": 20,
+      "total": 27,
+      "activeStart": 6,
+      "activeEnd": 7,
+      "damage": 85,
+      "flags": "Unblockable, DirectionalThrow",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    }
+  ]
+}

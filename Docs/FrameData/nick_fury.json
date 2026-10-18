@@ -1,0 +1,73 @@
+{
+  "hero": "Nick Fury",
+  "fps": 60,
+  "assistOnly": true,
+  "bodyHeight": 1.7999878,
+  "assistMoves": [
+    "Gun Kata Burst",
+    "Helicarrier Strike",
+    "Flashbang"
+  ],
+  "moves": [
+    {
+      "name": "Gun Kata Burst",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 8,
+      "active": 1,
+      "recovery": 14,
+      "total": 23,
+      "activeStart": 9,
+      "activeEnd": 9,
+      "damage": 35,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Helicarrier Strike",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 30,
+      "active": 6,
+      "recovery": 10,
+      "total": 46,
+      "activeStart": 31,
+      "activeEnd": 36,
+      "damage": 90,
+      "flags": "GroundBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Flashbang",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 10,
+      "active": 4,
+      "recovery": 12,
+      "total": 26,
+      "activeStart": 11,
+      "activeEnd": 14,
+      "damage": 10,
+      "flags": "Unblockable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    }
+  ]
+}
