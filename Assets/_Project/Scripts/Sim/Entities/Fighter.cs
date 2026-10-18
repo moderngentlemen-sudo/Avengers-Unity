@@ -58,6 +58,14 @@ namespace Reforged.Sim
         public int ToolState, ToolCharge, AiCooldown;
         public int LastVictimId = -1;
 
+        // Hero mechanic state (see SimWorld.Mechanics): Meter is heat / rage / density energy / Pym
+        // particles; MechState is overheated flag, rage tier, density (0 normal, 1 phase, 2 diamond)
+        // or size (-1 small, 0 normal, 1 giant).
+        public int Meter, MechState, MechTimer, MechIdleFrames;
+        public bool PhaseStrike;
+        /// <summary>Shrunk by Ant-Man's Quantum Tunnel: tiny hurtbox, takes extra damage.</summary>
+        public int ShrunkFrames;
+
         public InputFrame Input, PrevInput;
         public readonly int[] LastPress = new int[InputFrame.ButtonCount];
         public int LastEvadeFlick = NeverPressed;
@@ -107,6 +115,7 @@ namespace Reforged.Sim
             w.Write(BouncesUsed); w.Write(PendingBounce); w.Write(JuggleExhausted);
             w.Write(ArmorLeft); w.Write(ArmorRegenTimer); w.Write(BuffFrames);
             w.Write(HeldDebrisId); w.Write(ToolState); w.Write(ToolCharge); w.Write(AiCooldown); w.Write(LastVictimId);
+            w.Write(Meter); w.Write(MechState); w.Write(MechTimer); w.Write(MechIdleFrames); w.Write(PhaseStrike); w.Write(ShrunkFrames);
             w.Write(Input); w.Write(PrevInput);
             for (int i = 0; i < LastPress.Length; i++) w.Write(LastPress[i]);
             w.Write(LastEvadeFlick); w.Write(EvadeDirX); w.Write(EvadeDirZ);
@@ -130,6 +139,8 @@ namespace Reforged.Sim
             f.ArmorLeft = r.ReadInt32(); f.ArmorRegenTimer = r.ReadInt32(); f.BuffFrames = r.ReadInt32();
             f.HeldDebrisId = r.ReadInt32(); f.ToolState = r.ReadInt32(); f.ToolCharge = r.ReadInt32();
             f.AiCooldown = r.ReadInt32(); f.LastVictimId = r.ReadInt32();
+            f.Meter = r.ReadInt32(); f.MechState = r.ReadInt32(); f.MechTimer = r.ReadInt32(); f.MechIdleFrames = r.ReadInt32();
+            f.PhaseStrike = r.ReadBoolean(); f.ShrunkFrames = r.ReadInt32();
             f.Input = r.ReadInput(); f.PrevInput = r.ReadInput();
             for (int i = 0; i < f.LastPress.Length; i++) f.LastPress[i] = r.ReadInt32();
             f.LastEvadeFlick = r.ReadInt32(); f.EvadeDirX = r.ReadSByte(); f.EvadeDirZ = r.ReadSByte();

@@ -12,18 +12,15 @@ namespace Reforged.Sim
 
         FixVec3 HurtCenter(Fighter f)
         {
-            var half = Content.Heroes[f.HeroIndex].BodyHalfExtents;
+            var half = BodyHalf(f);
             return f.Mode == FighterMode.Knockdown ? f.Pos + new FixVec3(Fix.Zero, Fix.Cents(30), Fix.Zero) : f.Pos.WithY(f.Pos.Y + half.Y);
         }
 
-        FixVec3 HurtHalf(Fighter f)
+        public FixVec3 HurtHalf(Fighter f)
         {
-            var half = Content.Heroes[f.HeroIndex].BodyHalfExtents;
+            var half = BodyHalf(f);
             return f.Mode == FighterMode.Knockdown ? new FixVec3(half.Y, Fix.Cents(30), half.Z) : half;
         }
-
-        static FixVec3 HitboxCenter(Fighter f, MoveDef m) =>
-            f.Pos + new FixVec3(m.HitboxOffset.X * f.Facing, m.HitboxOffset.Y, m.HitboxOffset.Z);
 
         static bool Overlaps(FixVec3 ca, FixVec3 ha, FixVec3 cb, FixVec3 hb) =>
             Fix.Abs(ca.X - cb.X) <= ha.X + hb.X &&
@@ -44,8 +41,7 @@ namespace Reforged.Sim
                 var m = hero.Moves[a.MoveIndex];
                 if (!m.HasHitbox || a.MoveFrame < m.ActiveStart || a.MoveFrame > m.ActiveEnd) continue;
 
-                var center = HitboxCenter(a, m);
-                var half = m.HitboxHalfExtents;
+                AttackBox(a, m, out var center, out var half);
                 var spec = HitSpec.From(m, StyleKey(a.HeroIndex, a.MoveIndex));
 
                 for (int ti = 0; ti < Fighters.Count; ti++)
@@ -60,7 +56,8 @@ namespace Reforged.Sim
                     ApplyHit(a, spec, t, dir, true, a.OwnerSlot, false);
                 }
 
-                if (m.DestructionPower > 0)
+                int destruction = DestructionPowerOf(a, m);
+                if (destruction > 0)
                 {
                     for (int d = 0; d < Destructibles.Length; d++)
                     {
@@ -69,7 +66,7 @@ namespace Reforged.Sim
                         var def = Stage.Destructibles[d];
                         if (!Overlaps(center, half, def.Center, def.HalfExtents)) continue;
                         a.AddHitList(key);
-                        DamageDestructible(d, m.DestructionPower, a.OwnerSlot);
+                        DamageDestructible(d, destruction, a.OwnerSlot);
                     }
                 }
 
@@ -110,7 +107,13 @@ namespace Reforged.Sim
                 return false;
             }
 
-            if (CanBlock(victim, dirSign, hit))
+            bool phaseStrike = source != null && sourceHitstop && source.PhaseStrike;
+            if (phaseStrike)
+            {
+                source.PhaseStrike = false;
+                Emit(SimEventType.PhaseStrike, source.Id, victim.Id, 1, victim.Pos);
+            }
+            if (!phaseStrike && CanBlock(victim, dirSign, hit))
             {
                 if (Frame - victim.LastPress[InputFrame.IndexOf(Buttons.Block)] <= SimConstants.ParryWindowFrames)
                 {
@@ -128,11 +131,16 @@ namespace Reforged.Sim
             }
 
             int scaling = Math.Max(30, 100 - 6 * Math.Max(0, victim.ComboHits - 2));
-            int damage = hit.Damage * scaling / 100;
+            int damage = hit.Damage * scaling / 100 * DamagePercent(source) / 100;
             if (victim.BuffFrames > 0) damage /= 2;
-            bool unblockable = (hit.Flags & MoveFlags.Unblockable) != 0;
+            if (IsDiamond(victim)) damage /= 2;
+            if (victim.ShrunkFrames > 0) damage = damage * 3 / 2;
+            bool unblockable = (hit.Flags & MoveFlags.Unblockable) != 0 || phaseStrike;
+            // Small Ant-Man slips inside armor: armored enemies take a critical hit and flinch anyway.
+            bool armorCrit = victim.ArmorLeft > 0 && source != null && IsSmall(source);
+            if (armorCrit) damage = damage * 3 / 2;
 
-            if (victim.ArmorLeft > 0 && !unblockable)
+            if (victim.ArmorLeft > 0 && !unblockable && !armorCrit)
             {
                 victim.ArmorRegenTimer = SimConstants.ArmorRegenFrames;
                 bool heavy = hit.Tier >= MoveTier.Heavy;
@@ -154,7 +162,7 @@ namespace Reforged.Sim
                 }
                 return true;
             }
-            if (unblockable && victim.ArmorLeft > 0)
+            if (unblockable && victim.ArmorLeft > 0 && !armorCrit)
             {
                 victim.ArmorLeft = 0;
                 Emit(SimEventType.ArmorBreak, source != null ? source.Id : -1, victim.Id, 0, victim.Pos);
@@ -166,6 +174,7 @@ namespace Reforged.Sim
                 var vm = victimHero.Moves[victim.MoveIndex];
                 superArmor = vm.Has(MoveFlags.SuperArmor) && victim.MoveFrame <= vm.ActiveEnd;
             }
+            superArmor |= MechanicArmor(victim, hit);
 
             bool wasAlive = victim.Health > 0;
             victim.Health -= damage;
@@ -173,6 +182,8 @@ namespace Reforged.Sim
             victim.ComboHits++;
             victim.ComboDamage += damage;
             victim.JugglePoints += juggleCost;
+            GainRage(source != null && source.IsAssist ? null : source, damage / 2);
+            GainRage(victim, damage);
 
             if (source != null)
             {
@@ -225,7 +236,7 @@ namespace Reforged.Sim
             }
             else
             {
-                SetMode(victim, FighterMode.Hitstun, hit.Hitstun);
+                SetMode(victim, FighterMode.Hitstun, phaseStrike ? hit.Hitstun * 3 / 2 : hit.Hitstun);
             }
 
             // Air-combo hang: an airborne attacker that connects stops falling for a moment.

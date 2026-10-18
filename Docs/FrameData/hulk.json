@@ -1,0 +1,493 @@
+{
+  "hero": "Hulk",
+  "fps": 60,
+  "assistOnly": false,
+  "bodyHeight": 2.399994,
+  "assistMoves": [
+    "Gamma Charge",
+    "Boulder Toss",
+    "Thunderclap"
+  ],
+  "moves": [
+    {
+      "name": "Hammer Fist",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 6,
+      "active": 3,
+      "recovery": 12,
+      "total": 21,
+      "activeStart": 7,
+      "activeEnd": 9,
+      "damage": 45,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Backhand",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 7,
+      "active": 3,
+      "recovery": 14,
+      "total": 24,
+      "activeStart": 8,
+      "activeEnd": 10,
+      "damage": 50,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Double Axe Handle",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 10,
+      "active": 4,
+      "recovery": 22,
+      "total": 36,
+      "activeStart": 11,
+      "activeEnd": 14,
+      "damage": 85,
+      "flags": "GroundBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Gamma Haymaker",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 14,
+      "active": 4,
+      "recovery": 22,
+      "total": 40,
+      "activeStart": 15,
+      "activeEnd": 18,
+      "damage": 120,
+      "flags": "WallBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Hulk Uppercut",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Up",
+      "aerial": false,
+      "startup": 12,
+      "active": 4,
+      "recovery": 24,
+      "total": 40,
+      "activeStart": 13,
+      "activeEnd": 16,
+      "damage": 100,
+      "flags": "Launcher, CeilingBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Gamma Charge",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 14,
+      "active": 10,
+      "recovery": 20,
+      "total": 44,
+      "activeStart": 15,
+      "activeEnd": 24,
+      "damage": 110,
+      "flags": "WallBounce, SuperArmor",
+      "projectile": false,
+      "selfVelocity": [
+        0.33999634,
+        0
+      ]
+    },
+    {
+      "name": "Stomp",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 12,
+      "active": 4,
+      "recovery": 22,
+      "total": 38,
+      "activeStart": 13,
+      "activeEnd": 16,
+      "damage": 90,
+      "flags": "GroundBounce, OTG",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Air Smash",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 6,
+      "active": 4,
+      "recovery": 14,
+      "total": 24,
+      "activeStart": 7,
+      "activeEnd": 10,
+      "damage": 55,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Meteor Drop",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 10,
+      "active": 26,
+      "recovery": 12,
+      "total": 48,
+      "activeStart": 11,
+      "activeEnd": 36,
+      "damage": 110,
+      "flags": "OTG, FloorBreak",
+      "projectile": false,
+      "selfVelocity": [
+        0.05999756,
+        -0.41999817
+      ]
+    },
+    {
+      "name": "Boulder Toss",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 16,
+      "active": 1,
+      "recovery": 20,
+      "total": 37,
+      "activeStart": 17,
+      "activeEnd": 17,
+      "damage": 90,
+      "flags": "GroundBounce",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Gamma Leap",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Up",
+      "aerial": false,
+      "startup": 8,
+      "active": 10,
+      "recovery": 22,
+      "total": 40,
+      "activeStart": 9,
+      "activeEnd": 18,
+      "damage": 90,
+      "flags": "Launcher, CeilingBounce, Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0.099990845,
+        0.3999939
+      ]
+    },
+    {
+      "name": "Thunderclap",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 12,
+      "active": 4,
+      "recovery": 20,
+      "total": 36,
+      "activeStart": 13,
+      "activeEnd": 16,
+      "damage": 60,
+      "flags": "Launcher, LiftDebris",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Shoulder Barge",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 10,
+      "active": 12,
+      "recovery": 18,
+      "total": 40,
+      "activeStart": 11,
+      "activeEnd": 22,
+      "damage": 80,
+      "flags": "WallBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0.3999939,
+        0
+      ]
+    },
+    {
+      "name": "Ground Clap",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Back",
+      "aerial": false,
+      "startup": 10,
+      "active": 4,
+      "recovery": 18,
+      "total": 32,
+      "activeStart": 11,
+      "activeEnd": 14,
+      "damage": 50,
+      "flags": "OTG",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Gamma Wave",
+      "tier": "HeroSpecial",
+      "input": "HeroLight",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 14,
+      "active": 1,
+      "recovery": 18,
+      "total": 33,
+      "activeStart": 15,
+      "activeEnd": 15,
+      "damage": 90,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Smash Flurry",
+      "tier": "HeroSpecial",
+      "input": "HeroHeavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 8,
+      "active": 32,
+      "recovery": 20,
+      "total": 60,
+      "activeStart": 9,
+      "activeEnd": 40,
+      "damage": 24,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Earthshaker Leap",
+      "tier": "HeroSpecial",
+      "input": "HeroJump",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 12,
+      "active": 24,
+      "recovery": 18,
+      "total": 54,
+      "activeStart": 13,
+      "activeEnd": 36,
+      "damage": 140,
+      "flags": "GroundBounce, FloorBreak",
+      "projectile": false,
+      "selfVelocity": [
+        0.1599884,
+        0.33999634
+      ]
+    },
+    {
+      "name": "Car Fists",
+      "tier": "HeroSpecial",
+      "input": "HeroSpecial",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 12,
+      "active": 6,
+      "recovery": 22,
+      "total": 40,
+      "activeStart": 13,
+      "activeEnd": 18,
+      "damage": 150,
+      "flags": "WallBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Gamma Crush",
+      "tier": "Super",
+      "input": "Super",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 20,
+      "active": 8,
+      "recovery": 24,
+      "total": 52,
+      "activeStart": 21,
+      "activeEnd": 28,
+      "damage": 220,
+      "flags": "Launcher, Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "World Breaker Smash",
+      "tier": "Ultimate",
+      "input": "UltimateI",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 30,
+      "active": 10,
+      "recovery": 30,
+      "total": 70,
+      "activeStart": 31,
+      "activeEnd": 40,
+      "damage": 380,
+      "flags": "Launcher, Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Gamma Rage",
+      "tier": "Ultimate",
+      "input": "UltimateII",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 24,
+      "active": 4,
+      "recovery": 20,
+      "total": 48,
+      "activeStart": 25,
+      "activeEnd": 28,
+      "damage": 60,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "World Breaker Throw",
+      "tier": "Heavy",
+      "input": "Grab",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 6,
+      "active": 2,
+      "recovery": 26,
+      "total": 34,
+      "activeStart": 7,
+      "activeEnd": 8,
+      "damage": 200,
+      "flags": "GroundBounce, CeilingBounce, Unblockable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Savage Slam",
+      "tier": "Heavy",
+      "input": "Grab",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 6,
+      "active": 2,
+      "recovery": 24,
+      "total": 32,
+      "activeStart": 7,
+      "activeEnd": 8,
+      "damage": 150,
+      "flags": "GroundBounce, Unblockable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Gamma Toss",
+      "tier": "Heavy",
+      "input": "Grab",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 6,
+      "active": 2,
+      "recovery": 22,
+      "total": 30,
+      "activeStart": 7,
+      "activeEnd": 8,
+      "damage": 100,
+      "flags": "WallBounce, Unblockable, DirectionalThrow",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    }
+  ]
+}

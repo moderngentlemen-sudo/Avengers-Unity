@@ -10,6 +10,7 @@ namespace Reforged.Tests
         {
             Buttons.None, Buttons.Light, Buttons.Heavy, Buttons.Special, Buttons.Jump, Buttons.Grab, Buttons.Block,
             Buttons.Assist, Buttons.HeroMod | Buttons.Light, Buttons.HeroMod | Buttons.Assist, Buttons.Ultimate, Buttons.ToolDown,
+            Buttons.ToolLeft, Buttons.ToolRight, Buttons.HeroMod | Buttons.Ultimate,
         };
 
         /// <summary>Pseudo-random but "held for a while" inputs, like a real player mashing.</summary>
@@ -43,6 +44,49 @@ namespace Reforged.Tests
             world.SpawnEnemy(content.IndexOf(GrayboxContent.HydraHeavy), new FixVec3(7, 0, 0));
             world.Fighters[0].Gauge = SimConstants.MaxGauge;
             return world;
+        }
+
+        /// <summary>Iron Man, Hulk, Vision and Ant-Man: every mechanic running at once.</summary>
+        static SimWorld NewMechanicBattle()
+        {
+            var content = GrayboxContent.Create();
+            var world = new SimWorld(content, GrayboxStages.TestRoom(), 77);
+            string[] heroes = { GrayboxContent.IronMan, GrayboxContent.Hulk, GrayboxContent.Vision, GrayboxContent.AntMan };
+            for (int i = 0; i < heroes.Length; i++)
+            {
+                var f = world.SpawnPlayer(i, content.IndexOf(heroes[i]), new FixVec3(i * 2, 0, 0), content.IndexOf(GrayboxContent.NickFury));
+                f.Gauge = SimConstants.MaxGauge;
+            }
+            world.SpawnEnemy(content.IndexOf(GrayboxContent.HydraTrooper), new FixVec3(9, 0, 0));
+            world.SpawnEnemy(content.IndexOf(GrayboxContent.HydraHeavy), new FixVec3(12, 0, 0));
+            world.SpawnEnemy(content.IndexOf(GrayboxContent.HydraTrooper), new FixVec3(-4, 0, 1));
+            world.AssembleMeter = SimConstants.AssembleMeterMax - 200;
+            return world;
+        }
+
+        [Test]
+        public void MechanicHeroesStayInSyncUnderRollback()
+        {
+            const int frames = 900, delay = 5, players = 4;
+            var script = ScriptInputs(frames, players, 2024);
+
+            var reference = NewMechanicBattle();
+            for (int f = 0; f < frames; f++) reference.Step(script[f]);
+
+            var session = new RollbackSession(NewMechanicBattle(), players);
+            for (int f = 0; f < frames; f++)
+            {
+                session.AddInput(0, f, script[f][0]);
+                for (int p = 1; p < players; p++)
+                    if (f - delay >= 0) session.AddInput(p, f - delay, script[f - delay][p]);
+                session.Advance();
+            }
+            for (int f = frames - delay; f < frames; f++)
+                for (int p = 1; p < players; p++) session.AddInput(p, f, script[f][p]);
+            session.Resimulate();
+
+            Assert.Greater(session.RollbacksPerformed, 0);
+            Assert.AreEqual(reference.Checksum(), session.World.Checksum());
         }
 
         [Test]

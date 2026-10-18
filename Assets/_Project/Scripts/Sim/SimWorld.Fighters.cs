@@ -20,8 +20,13 @@ namespace Reforged.Sim
                 if ((Frame & 3) == 0) AddGauge(f, 1);
             }
             if (f.ArmorLeft < hero.Armor && --f.ArmorRegenTimer <= 0) f.ArmorLeft = hero.Armor;
+            TickMechanic(f, hero);
 
-            if (f.IsPlayer && !f.IsStunned) HandlePlayerCommands(f);
+            if (f.IsPlayer && !f.IsStunned)
+            {
+                HandlePlayerCommands(f);
+                HandleMechanicInput(f, hero);
+            }
 
             switch (f.Mode)
             {
@@ -104,7 +109,8 @@ namespace Reforged.Sim
                 if (ConsumeIfBuffered(f, Buttons.Jump))
                 {
                     var platform = Stage.Platforms[f.GroundPlatform];
-                    if (StickDirOf(f) == StickDir.Down && !platform.Solid) DropThrough(f);
+                    bool canDrop = !platform.Solid || (IsPhased(f) && platform.Top > LowestPlatformTop());
+                    if (StickDirOf(f) == StickDir.Down && canDrop) DropThrough(f);
                     else Jump(f, hero, false);
                     return;
                 }
@@ -120,7 +126,7 @@ namespace Reforged.Sim
             }
             else
             {
-                if (f.AirJumpsUsed < hero.AirJumps && ConsumeIfBuffered(f, Buttons.Jump))
+                if (f.AirJumpsUsed < AirJumpsFor(f, hero) && ConsumeIfBuffered(f, Buttons.Jump))
                 {
                     f.AirJumpsUsed++;
                     Jump(f, hero, false);
@@ -141,7 +147,8 @@ namespace Reforged.Sim
             int mx = Math.Abs((int)f.Input.MoveX) < InputFrame.StickDeadzone ? 0 : f.Input.MoveX;
             int mz = Math.Abs((int)f.Input.MoveZ) < InputFrame.StickDeadzone ? 0 : f.Input.MoveZ;
             if (mx != 0) f.Facing = (sbyte)Math.Sign(mx);
-            f.Vel = new FixVec3(hero.WalkSpeed * mx / 127, f.Vel.Y, hero.DepthSpeed * mz / 127);
+            int pct = SpeedPercent(f);
+            f.Vel = new FixVec3(hero.WalkSpeed * mx / 127 * pct / 100, f.Vel.Y, hero.DepthSpeed * mz / 127 * pct / 100);
             var mode = mx != 0 || mz != 0 ? FighterMode.Walk : FighterMode.Idle;
             if (f.Mode != mode) SetMode(f, mode, 0);
         }
@@ -243,7 +250,7 @@ namespace Reforged.Sim
                 var cur = hero.Moves[f.MoveIndex];
                 if (cur.ChainNextIndex >= 0 && hero.Moves[cur.ChainNextIndex].Aerial == aerial) idx = cur.ChainNextIndex;
             }
-            if (idx < 0) idx = hero.FindMove(input, dir, aerial);
+            if (idx < 0) idx = hero.FindMove(input, dir, aerial, MechanicTier(f));
             if (idx < 0) return false;
             if (cancelling && !CanCancelInto(f, hero, hero.Moves[idx])) return false;
             if (!StartMove(f, hero, idx)) return false;
@@ -265,6 +272,7 @@ namespace Reforged.Sim
             var m = hero.Moves[idx];
             if (f.Gauge < m.GaugeCost) return false;
             if (m.Projectile != null && HasActiveProjectile(f.Id)) return false;
+            if (!MechanicAllowsMove(f, m)) return false;
 
             f.Gauge -= m.GaugeCost;
             DropHeldDebris(f);
@@ -277,6 +285,7 @@ namespace Reforged.Sim
             f.MoveHasHit = false;
             f.HitListCount = 0;
             SetMode(f, FighterMode.Attack, 0);
+            OnMechanicMoveStarted(f, m);
             if (m.Has(MoveFlags.Invulnerable)) f.InvulnFrames = Math.Max(f.InvulnFrames, m.ActiveEnd);
 
             Emit(SimEventType.MoveStarted, f.Id, idx, (int)m.Tier, f.Pos);
@@ -335,6 +344,7 @@ namespace Reforged.Sim
                 if (vy.Raw > 0) f.GroundPlatform = -1;
             }
             if (m.Projectile != null) SpawnProjectile(f, m);
+            if (m.Has(MoveFlags.LiftDebris)) LiftDebrisAround(f);
             if (m.TeamBuffFrames > 0)
             {
                 for (int i = 0; i < Fighters.Count; i++)
@@ -348,6 +358,7 @@ namespace Reforged.Sim
 
         void EndMove(Fighter f)
         {
+            f.PhaseStrike = false;
             if (f.IsAssist)
             {
                 f.Mode = FighterMode.Despawned;
@@ -362,6 +373,7 @@ namespace Reforged.Sim
         {
             var hero = Content.Heroes[f.HeroIndex];
             var g = hero.Gravity;
+            if (IsHovering(f)) return g / 5;
             if (f.Mode == FighterMode.Juggle)
                 return g * (100 + f.JugglePoints * SimConstants.JuggleGravityPercentPerPoint) / 100;
             if (f.Mode == FighterMode.Attack && f.MoveIndex >= 0)
@@ -510,10 +522,12 @@ namespace Reforged.Sim
 
                 case FighterMode.Attack:
                     var m = hero.Moves[f.MoveIndex];
-                    if (m.Has(MoveFlags.FloorBreak) && f.MoveFrame >= m.ActiveStart)
+                    // Diamond-dense Vision breaks floors with any aerial attack.
+                    bool floorBreak = m.Has(MoveFlags.FloorBreak) || (IsDiamond(f) && m.Aerial);
+                    if (floorBreak && f.MoveFrame >= m.ActiveStart)
                     {
                         int d = Stage.Platforms[platform].Destructible;
-                        if (d >= 0 && DamageDestructible(d, m.DestructionPower, f.OwnerSlot))
+                        if (d >= 0 && DamageDestructible(d, DestructionPowerOf(f, m), f.OwnerSlot))
                         {
                             // The floor gave way: keep the dive going down to the level below.
                             f.GroundPlatform = -1;
@@ -539,7 +553,7 @@ namespace Reforged.Sim
             if (next.X - half < Stage.MinX) return OnWall(f, -1, Stage.MinX + half, next);
             if (next.X + half > Stage.MaxX) return OnWall(f, -1, Stage.MaxX - half, next);
             var height = hero.Height;
-            for (int i = 0; i < Stage.Walls.Count; i++)
+            for (int i = 0; i < Stage.Walls.Count && !IsPhased(f); i++)
             {
                 if (!IsWallEnabled(i)) continue;
                 var w = Stage.Walls[i];

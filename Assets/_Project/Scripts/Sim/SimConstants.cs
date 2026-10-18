@@ -32,6 +32,22 @@ namespace Reforged.Sim
         public const int AssembleMeterMax = 1000;
         public const int AssembleVoteWindow = 60;
 
+        // Hero mechanics (SimWorld.Mechanics). Every meter runs 0..MechanicMax.
+        public const int MechanicMax = 1000;
+        public const int MechanicEnterCost = 100;
+        public const int OverheatFrames = 120;
+        public const int HeatCoolDelay = 30;
+        public const int HoverHeatPerFrame = 3;
+        public const int VentMinHeat = 300;
+        public const int RageTierSize = 333;
+        public const int RageDecayDelay = 180;
+        public const int RoarCost = 333;
+        public const int PhaseDrainPerFrame = 6;
+        public const int DiamondDrainPerFrame = 2;
+        public const int DensityRegenPerFrame = 4;
+        public const int GiantDrainPerFrame = 5;
+        public const int PymRegenPerFrame = 3;
+
         public const int DestructibleKeyBase = 100000;
         public const int DebrisKeyBase = 200000;
 

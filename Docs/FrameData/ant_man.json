@@ -1,0 +1,453 @@
+{
+  "hero": "Ant-Man",
+  "fps": 60,
+  "assistOnly": false,
+  "bodyHeight": 1.7599792,
+  "assistMoves": [
+    "Ant Swarm",
+    "Red Disc",
+    "Growth Spurt"
+  ],
+  "moves": [
+    {
+      "name": "Quick Jab",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 3,
+      "active": 2,
+      "recovery": 9,
+      "total": 14,
+      "activeStart": 4,
+      "activeEnd": 5,
+      "damage": 26,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Quick Hook",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 4,
+      "active": 2,
+      "recovery": 11,
+      "total": 17,
+      "activeStart": 5,
+      "activeEnd": 6,
+      "damage": 30,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Shrink Dash Punch",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 7,
+      "active": 5,
+      "recovery": 16,
+      "total": 28,
+      "activeStart": 8,
+      "activeEnd": 12,
+      "damage": 55,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.2999878,
+        0
+      ]
+    },
+    {
+      "name": "Pym Haymaker",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 10,
+      "active": 3,
+      "recovery": 18,
+      "total": 31,
+      "activeStart": 11,
+      "activeEnd": 13,
+      "damage": 80,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Growth Spurt",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Up",
+      "aerial": false,
+      "startup": 8,
+      "active": 5,
+      "recovery": 22,
+      "total": 35,
+      "activeStart": 9,
+      "activeEnd": 13,
+      "damage": 85,
+      "flags": "Launcher, CeilingBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Giant Shoulder",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 12,
+      "active": 6,
+      "recovery": 20,
+      "total": 38,
+      "activeStart": 13,
+      "activeEnd": 18,
+      "damage": 90,
+      "flags": "WallBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0.23999023,
+        0
+      ]
+    },
+    {
+      "name": "Ant Sweep",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 8,
+      "active": 4,
+      "recovery": 20,
+      "total": 32,
+      "activeStart": 9,
+      "activeEnd": 12,
+      "damage": 60,
+      "flags": "OTG",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Ant Kick",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 4,
+      "active": 3,
+      "recovery": 10,
+      "total": 17,
+      "activeStart": 5,
+      "activeEnd": 7,
+      "damage": 28,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Pinball Kick",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 6,
+      "active": 4,
+      "recovery": 14,
+      "total": 24,
+      "activeStart": 7,
+      "activeEnd": 10,
+      "damage": 45,
+      "flags": "GroundBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Size Drop",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 9,
+      "active": 22,
+      "recovery": 12,
+      "total": 43,
+      "activeStart": 10,
+      "activeEnd": 31,
+      "damage": 75,
+      "flags": "OTG, FloorBreak",
+      "projectile": false,
+      "selfVelocity": [
+        0.039993286,
+        -0.3999939
+      ]
+    },
+    {
+      "name": "Red Disc",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 9,
+      "active": 1,
+      "recovery": 16,
+      "total": 26,
+      "activeStart": 10,
+      "activeEnd": 10,
+      "damage": 40,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Blue Disc",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 11,
+      "active": 1,
+      "recovery": 18,
+      "total": 30,
+      "activeStart": 12,
+      "activeEnd": 12,
+      "damage": 55,
+      "flags": "WallBounce",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Flying Ant Mount",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Up",
+      "aerial": false,
+      "startup": 6,
+      "active": 14,
+      "recovery": 18,
+      "total": 38,
+      "activeStart": 7,
+      "activeEnd": 20,
+      "damage": 60,
+      "flags": "Launcher, CeilingBounce, Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0.11999512,
+        0.33999634
+      ]
+    },
+    {
+      "name": "Ant Swarm",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 10,
+      "active": 24,
+      "recovery": 16,
+      "total": 50,
+      "activeStart": 11,
+      "activeEnd": 34,
+      "damage": 14,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Pinball",
+      "tier": "HeroSpecial",
+      "input": "HeroLight",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 6,
+      "active": 24,
+      "recovery": 16,
+      "total": 46,
+      "activeStart": 7,
+      "activeEnd": 30,
+      "damage": 22,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.2599945,
+        0
+      ]
+    },
+    {
+      "name": "Giant Stomp",
+      "tier": "HeroSpecial",
+      "input": "HeroHeavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 16,
+      "active": 6,
+      "recovery": 24,
+      "total": 46,
+      "activeStart": 17,
+      "activeEnd": 22,
+      "damage": 130,
+      "flags": "GroundBounce, OTG",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Quantum Dive",
+      "tier": "HeroSpecial",
+      "input": "HeroJump",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 18,
+      "active": 6,
+      "recovery": 18,
+      "total": 42,
+      "activeStart": 19,
+      "activeEnd": 24,
+      "damage": 110,
+      "flags": "Launcher, Invulnerable, Unblockable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Colony Call",
+      "tier": "HeroSpecial",
+      "input": "HeroSpecial",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 14,
+      "active": 30,
+      "recovery": 16,
+      "total": 60,
+      "activeStart": 15,
+      "activeEnd": 44,
+      "damage": 16,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Giant-Man Rampage",
+      "tier": "Super",
+      "input": "Super",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 20,
+      "active": 24,
+      "recovery": 24,
+      "total": 68,
+      "activeStart": 21,
+      "activeEnd": 44,
+      "damage": 50,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Giant-Man",
+      "tier": "Ultimate",
+      "input": "UltimateI",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 30,
+      "active": 10,
+      "recovery": 30,
+      "total": 70,
+      "activeStart": 31,
+      "activeEnd": 40,
+      "damage": 360,
+      "flags": "Launcher, Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Quantum Tunnel",
+      "tier": "Ultimate",
+      "input": "UltimateII",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 24,
+      "active": 4,
+      "recovery": 20,
+      "total": 48,
+      "activeStart": 25,
+      "activeEnd": 28,
+      "damage": 30,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Pym Toss",
+      "tier": "Heavy",
+      "input": "Grab",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 5,
+      "active": 2,
+      "recovery": 20,
+      "total": 27,
+      "activeStart": 6,
+      "activeEnd": 7,
+      "damage": 80,
+      "flags": "WallBounce, Unblockable, DirectionalThrow",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    }
+  ]
+}

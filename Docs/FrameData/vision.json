@@ -1,0 +1,453 @@
+{
+  "hero": "Vision",
+  "fps": 60,
+  "assistOnly": false,
+  "bodyHeight": 1.7999878,
+  "assistMoves": [
+    "Mind Stone Beam",
+    "Intangible Rush",
+    "Ascension"
+  ],
+  "moves": [
+    {
+      "name": "Synthezoid Jab",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 4,
+      "active": 2,
+      "recovery": 10,
+      "total": 16,
+      "activeStart": 5,
+      "activeEnd": 6,
+      "damage": 30,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Synthezoid Cross",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 5,
+      "active": 2,
+      "recovery": 12,
+      "total": 19,
+      "activeStart": 6,
+      "activeEnd": 7,
+      "damage": 35,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0.049987793,
+        0
+      ]
+    },
+    {
+      "name": "Phase Backfist",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 9,
+      "active": 5,
+      "recovery": 18,
+      "total": 32,
+      "activeStart": 10,
+      "activeEnd": 14,
+      "damage": 60,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0.2999878,
+        0
+      ]
+    },
+    {
+      "name": "Solid Palm",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 11,
+      "active": 3,
+      "recovery": 18,
+      "total": 32,
+      "activeStart": 12,
+      "activeEnd": 14,
+      "damage": 85,
+      "flags": "WallBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Density Uppercut",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Up",
+      "aerial": false,
+      "startup": 9,
+      "active": 4,
+      "recovery": 22,
+      "total": 35,
+      "activeStart": 10,
+      "activeEnd": 13,
+      "damage": 80,
+      "flags": "Launcher",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Solid Lance",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 12,
+      "active": 5,
+      "recovery": 20,
+      "total": 37,
+      "activeStart": 13,
+      "activeEnd": 17,
+      "damage": 90,
+      "flags": "WallBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0.17999268,
+        0
+      ]
+    },
+    {
+      "name": "Phase Sweep",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 9,
+      "active": 4,
+      "recovery": 20,
+      "total": 33,
+      "activeStart": 10,
+      "activeEnd": 13,
+      "damage": 65,
+      "flags": "OTG",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Air Phase Strike",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 4,
+      "active": 3,
+      "recovery": 10,
+      "total": 17,
+      "activeStart": 5,
+      "activeEnd": 7,
+      "damage": 30,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Air Solar Kick",
+      "tier": "Light",
+      "input": "Light",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 7,
+      "active": 3,
+      "recovery": 16,
+      "total": 26,
+      "activeStart": 8,
+      "activeEnd": 10,
+      "damage": 50,
+      "flags": "GroundBounce",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Diamond Dive",
+      "tier": "Heavy",
+      "input": "Heavy",
+      "direction": "Neutral",
+      "aerial": true,
+      "startup": 9,
+      "active": 22,
+      "recovery": 10,
+      "total": 41,
+      "activeStart": 10,
+      "activeEnd": 31,
+      "damage": 80,
+      "flags": "OTG",
+      "projectile": false,
+      "selfVelocity": [
+        0.07998657,
+        -0.3999939
+      ]
+    },
+    {
+      "name": "Mind Stone Beam",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 12,
+      "active": 16,
+      "recovery": 18,
+      "total": 46,
+      "activeStart": 13,
+      "activeEnd": 28,
+      "damage": 18,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Ascension",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Up",
+      "aerial": false,
+      "startup": 7,
+      "active": 8,
+      "recovery": 22,
+      "total": 37,
+      "activeStart": 8,
+      "activeEnd": 15,
+      "damage": 80,
+      "flags": "Launcher, CeilingBounce, Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0.019989014,
+        0.2999878
+      ]
+    },
+    {
+      "name": "Phase Drop",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Down",
+      "aerial": false,
+      "startup": 16,
+      "active": 4,
+      "recovery": 20,
+      "total": 40,
+      "activeStart": 17,
+      "activeEnd": 20,
+      "damage": 70,
+      "flags": "Launcher, Invulnerable, Unblockable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Intangible Rush",
+      "tier": "Special",
+      "input": "Special",
+      "direction": "Forward",
+      "aerial": false,
+      "startup": 8,
+      "active": 10,
+      "recovery": 16,
+      "total": 34,
+      "activeStart": 9,
+      "activeEnd": 18,
+      "damage": 65,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0.35998535,
+        0
+      ]
+    },
+    {
+      "name": "Solar Lances",
+      "tier": "HeroSpecial",
+      "input": "HeroLight",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 10,
+      "active": 1,
+      "recovery": 16,
+      "total": 27,
+      "activeStart": 11,
+      "activeEnd": 11,
+      "damage": 50,
+      "flags": "None",
+      "projectile": true,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Diamond Hammer",
+      "tier": "HeroSpecial",
+      "input": "HeroHeavy",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 14,
+      "active": 4,
+      "recovery": 22,
+      "total": 40,
+      "activeStart": 15,
+      "activeEnd": 18,
+      "damage": 140,
+      "flags": "GroundBounce, SuperArmor",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Phantom Flight",
+      "tier": "HeroSpecial",
+      "input": "HeroJump",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 6,
+      "active": 18,
+      "recovery": 14,
+      "total": 38,
+      "activeStart": 7,
+      "activeEnd": 24,
+      "damage": 70,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0.21998596,
+        0.23999023
+      ]
+    },
+    {
+      "name": "Mind Stone Pulse",
+      "tier": "HeroSpecial",
+      "input": "HeroSpecial",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 14,
+      "active": 6,
+      "recovery": 18,
+      "total": 38,
+      "activeStart": 15,
+      "activeEnd": 20,
+      "damage": 30,
+      "flags": "None",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Synthezoid Overdrive",
+      "tier": "Super",
+      "input": "Super",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 18,
+      "active": 30,
+      "recovery": 20,
+      "total": 68,
+      "activeStart": 19,
+      "activeEnd": 48,
+      "damage": 30,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Mind Stone Solar Beam",
+      "tier": "Ultimate",
+      "input": "UltimateI",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 30,
+      "active": 45,
+      "recovery": 30,
+      "total": 105,
+      "activeStart": 31,
+      "activeEnd": 75,
+      "damage": 42,
+      "flags": "Invulnerable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Phase Field",
+      "tier": "Ultimate",
+      "input": "UltimateII",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 24,
+      "active": 6,
+      "recovery": 20,
+      "total": 50,
+      "activeStart": 25,
+      "activeEnd": 30,
+      "damage": 40,
+      "flags": "Invulnerable, Unblockable",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Density Throw",
+      "tier": "Heavy",
+      "input": "Grab",
+      "direction": "Neutral",
+      "aerial": false,
+      "startup": 5,
+      "active": 2,
+      "recovery": 20,
+      "total": 27,
+      "activeStart": 6,
+      "activeEnd": 7,
+      "damage": 90,
+      "flags": "GroundBounce, Unblockable, DirectionalThrow",
+      "projectile": false,
+      "selfVelocity": [
+        0,
+        0
+      ]
+    }
+  ]
+}

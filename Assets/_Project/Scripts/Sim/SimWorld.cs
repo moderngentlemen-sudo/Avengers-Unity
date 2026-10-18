@@ -73,6 +73,8 @@ namespace Reforged.Sim
                 Pos = pos,
                 Health = hero.MaxHealth,
                 ArmorLeft = hero.Armor,
+                // Density energy and Pym particles start full; heat and rage start empty.
+                Meter = hero.Mechanic == HeroMechanic.Density || hero.Mechanic == HeroMechanic.Size ? SimConstants.MechanicMax : 0,
             };
             f.GroundPlatform = (short)FindSupportPlatform(pos);
             f.Mode = f.IsGrounded ? FighterMode.Idle : FighterMode.Airborne;

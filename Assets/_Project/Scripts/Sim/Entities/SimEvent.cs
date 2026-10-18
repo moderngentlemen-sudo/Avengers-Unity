@@ -14,6 +14,7 @@ namespace Reforged.Sim
         ProjectileSpawned, Ricochet, ProjectileCaught,
         AssistCalled, AssistNotReady, ComboRelay, ComboEnded, StyleRankUp,
         JumpCancel, LaneCancel, Taunt, ToolUsed, TeamBuff, Ping,
+        Overheat, HeatVent, RageTier, GammaRoar, DensityChanged, SizeChanged, MechanicDepleted, PhaseStrike, DebrisLifted,
     }
 
     public struct SimEvent

@@ -5,7 +5,7 @@ namespace Reforged.Sim
     /// graybox enemies. Designers can export these to HeroAssets in Unity and tune from there.
     /// Units: distances in hundredths of a meter, velocities in hundredths of a meter per tick.
     /// </summary>
-    public static class GrayboxContent
+    public static partial class GrayboxContent
     {
         public const string CaptainAmerica = "Captain America";
         public const string IronMan = "Iron Man";
@@ -25,6 +25,9 @@ namespace Reforged.Sim
             db.Add(BuildHydraHeavy());
             db.Add(BuildNickFury());
             db.Add(BuildWarMachine());
+            db.Add(BuildHulk());
+            db.Add(BuildVision());
+            db.Add(BuildAntMan());
             return db.Resolve();
         }
 
@@ -161,20 +164,22 @@ namespace Reforged.Sim
                 Gravity = Fix.Ratio(15, 1000),
                 AirJumps = 2,
                 AssistMoves = new[] { "Repulsor Blast", "Unibeam Burst", "Boot-Jet Launcher" },
+                Mechanic = HeroMechanic.Heat,   // hold Jump in the air to hover; D-pad down vents
+                ToolCycleRange = 1,             // D-pad left/right: repulsor aim low / level / high
             };
             h.Add(new MoveDef { Name = "Gauntlet Jab", Tier = MoveTier.Light, Input = MoveInput.Light, Startup = 4, Active = 2, Recovery = 10,
                 Damage = 28, Hitstun = 16, HitboxOffset = V(75, 110), HitboxHalfExtents = V(45, 30, 45), Knockback = V(4, 0), SelfVelocity = V(5, 0),
                 ChainNext = "Repulsor Palm" });
-            h.Add(new MoveDef { Name = "Repulsor Palm", Tier = MoveTier.Light, Input = MoveInput.Light, Startup = 6, Active = 3, Recovery = 12,
+            h.Add(new MoveDef { Name = "Repulsor Palm", HeatCost = 60, Tier = MoveTier.Light, Input = MoveInput.Light, Startup = 6, Active = 3, Recovery = 12,
                 Damage = 40, Hitstun = 18, HitboxOffset = V(90, 110), HitboxHalfExtents = V(60, 35, 45), Knockback = V(6, 0), SelfVelocity = V(5, 0),
                 DestructionPower = 20, ChainNext = "Thruster Kick" });
             h.Add(new MoveDef { Name = "Thruster Kick", Tier = MoveTier.Light, Input = MoveInput.Light, Startup = 8, Active = 3, Recovery = 18,
                 Damage = 65, Hitstun = 24, Hitstop = 6, HitboxOffset = V(95, 100), HitboxHalfExtents = V(60, 40, 50), Knockback = V(16, 12),
                 JuggleCost = 4, DestructionPower = 30 });
-            h.Add(new MoveDef { Name = "Unibeam Burst", Tier = MoveTier.Heavy, Input = MoveInput.Heavy, Startup = 12, Active = 4, Recovery = 18,
+            h.Add(new MoveDef { Name = "Unibeam Burst", HeatCost = 220, Tier = MoveTier.Heavy, Input = MoveInput.Heavy, Startup = 12, Active = 4, Recovery = 18,
                 Damage = 85, Hitstun = 28, Hitstop = 7, HitboxOffset = V(150, 120), HitboxHalfExtents = V(110, 30, 45), Knockback = V(20, 6),
                 JuggleCost = 4, DestructionPower = 60, Flags = MoveFlags.WallBounce });
-            h.Add(new MoveDef { Name = "Boot-Jet Launcher", Tier = MoveTier.Heavy, Input = MoveInput.Heavy, Direction = StickDir.Up,
+            h.Add(new MoveDef { Name = "Boot-Jet Launcher", HeatCost = 120, Tier = MoveTier.Heavy, Input = MoveInput.Heavy, Direction = StickDir.Up,
                 Startup = 9, Active = 4, Recovery = 20, Damage = 75, Hitstun = 30, HitboxOffset = V(60, 120), HitboxHalfExtents = V(50, 80, 50),
                 Knockback = V(2, 33), SelfVelocity = V(0, 20), JuggleCost = 6, Flags = MoveFlags.Launcher });
             h.Add(new MoveDef { Name = "Air Palm", Tier = MoveTier.Light, Input = MoveInput.Light, Aerial = true, Startup = 4, Active = 3, Recovery = 10,
@@ -182,20 +187,20 @@ namespace Reforged.Sim
             h.Add(new MoveDef { Name = "Air Thruster Spin", Tier = MoveTier.Light, Input = MoveInput.Light, Aerial = true, Startup = 6, Active = 6, Recovery = 14,
                 Damage = 45, Hitstun = 22, HitboxOffset = V(40, 80), HitboxHalfExtents = V(80, 60, 50), Knockback = V(5, -28), JuggleCost = 3,
                 Flags = MoveFlags.GroundBounce });
-            h.Add(new MoveDef { Name = "Repulsor Blast", Tier = MoveTier.Special, Input = MoveInput.Special, Startup = 9, Active = 1, Recovery = 16,
+            h.Add(new MoveDef { Name = "Repulsor Blast", HeatCost = 180, Tier = MoveTier.Special, Input = MoveInput.Special, Startup = 9, Active = 1, Recovery = 16,
                 Damage = 50, Hitstun = 20, HitboxHalfExtents = FixVec3.Zero, Knockback = V(12, 4), JuggleCost = 3, DestructionPower = 35,
                 Projectile = new ProjectileSpec { Speed = Fix.Cents(55), Lifetime = 30, HalfExtents = V(35, 30, 45) } });
-            h.Add(new MoveDef { Name = "Smart Missiles", Tier = MoveTier.Special, Input = MoveInput.Special, Direction = StickDir.Down,
+            h.Add(new MoveDef { Name = "Smart Missiles", HeatCost = 200, Tier = MoveTier.Special, Input = MoveInput.Special, Direction = StickDir.Down,
                 Startup = 12, Active = 1, Recovery = 20, Damage = 40, Hitstun = 20, HitboxHalfExtents = FixVec3.Zero, Knockback = V(6, 14),
                 JuggleCost = 3, DestructionPower = 50,
                 Projectile = new ProjectileSpec { Speed = Fix.Cents(35), Rise = Fix.Cents(10), Lifetime = 45, Ricochets = 3 } });
-            h.Add(new MoveDef { Name = "Repulsor Barrage", Tier = MoveTier.HeroSpecial, Input = MoveInput.HeroHeavy, Startup = 8, Active = 24, Recovery = 16,
+            h.Add(new MoveDef { Name = "Repulsor Barrage", HeatCost = 300, Tier = MoveTier.HeroSpecial, Input = MoveInput.HeroHeavy, Startup = 8, Active = 24, Recovery = 16,
                 Damage = 20, Hitstun = 14, Hitstop = 3, HitboxOffset = V(160, 110), HitboxHalfExtents = V(120, 40, 50), Knockback = V(3, 0),
                 MaxHits = 8, RehitInterval = 3, JuggleCost = 1, GaugeCost = 100, DestructionPower = 20 });
-            h.Add(new MoveDef { Name = "Pulse Bolts", Tier = MoveTier.HeroSpecial, Input = MoveInput.HeroLight, Startup = 10, Active = 1, Recovery = 16,
+            h.Add(new MoveDef { Name = "Pulse Bolts", HeatCost = 250, Tier = MoveTier.HeroSpecial, Input = MoveInput.HeroLight, Startup = 10, Active = 1, Recovery = 16,
                 Damage = 55, Hitstun = 24, HitboxHalfExtents = FixVec3.Zero, Knockback = V(8, 16), JuggleCost = 3, GaugeCost = 100,
                 DestructionPower = 60, Projectile = new ProjectileSpec { Speed = Fix.Cents(45), Lifetime = 40, Ricochets = 3 } });
-            h.Add(new MoveDef { Name = "Afterburner Dive", Tier = MoveTier.HeroSpecial, Input = MoveInput.HeroJump, Startup = 12, Active = 22, Recovery = 16,
+            h.Add(new MoveDef { Name = "Afterburner Dive", HeatCost = 150, Tier = MoveTier.HeroSpecial, Input = MoveInput.HeroJump, Startup = 12, Active = 22, Recovery = 16,
                 Damage = 110, Hitstun = 30, Hitstop = 9, HitboxOffset = V(60, 50), HitboxHalfExtents = V(80, 60, 60), Knockback = V(10, -24),
                 SelfVelocity = V(24, 22), JuggleCost = 5, GaugeCost = 100, DestructionPower = 150,
                 Flags = MoveFlags.GroundBounce | MoveFlags.FloorBreak });

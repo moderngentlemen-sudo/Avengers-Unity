@@ -49,7 +49,8 @@ namespace Reforged.Tests
 
             Assert.IsFalse(lobby.CanAssist(0, lobby.AssistChoices.Find(e => e.Name == Tony)), "Iron Man is being played");
             Assert.IsFalse(lobby.CanAssist(0, lobby.AssistChoices.Find(e => e.Name == Cap)), "can't assist yourself");
-            Assert.AreEqual(GrayboxContent.NickFury, lobby.AssistChoices[lobby.Slots[0].AssistCursor].Name, "cursor jumps to the first legal assist");
+            Assert.AreEqual(GrayboxContent.Hulk, lobby.AssistChoices[lobby.Slots[0].AssistCursor].Name, "cursor jumps to the first legal assist");
+            Assert.IsFalse(lobby.CanAssist(0, lobby.AssistChoices.Find(e => e.Name == "Thor")), "unbuilt heroes can't assist");
             Pick(lobby, 0, GrayboxContent.NickFury);
             Pick(lobby, 1, GrayboxContent.WarMachine);
 

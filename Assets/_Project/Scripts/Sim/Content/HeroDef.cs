@@ -5,6 +5,12 @@ namespace Reforged.Sim
 {
     public enum BrainType : byte { Player, None, Grunt, Brute }
 
+    /// <summary>
+    /// Signature hero resource, shown as a meter on the HUD:
+    /// Heat (Iron Man), Rage (Hulk), Density energy (Vision), Pym particles (Ant-Man).
+    /// </summary>
+    public enum HeroMechanic : byte { None, Heat, Rage, Density, Size }
+
     /// <summary>Immutable character data: stats plus the full move list. Shared by heroes, assists and enemies.</summary>
     public sealed class HeroDef
     {
@@ -28,6 +34,9 @@ namespace Reforged.Sim
         public int ToolCycleRange;
         /// <summary>Gauge cost of the D-pad down tool charge (Cap: extra shield ricochet). 0 = none.</summary>
         public int ToolChargeCost;
+        public HeroMechanic Mechanic;
+        /// <summary>Moves started by D-pad left/right (Hulk's claps). Empty = unused by this hero.</summary>
+        public string ToolLeftMove, ToolRightMove;
 
         public readonly List<MoveDef> Moves = new List<MoveDef>();
 
@@ -43,21 +52,24 @@ namespace Reforged.Sim
         }
 
         /// <summary>Exact direction match first, then the neutral version of the same command.</summary>
-        public int FindMove(MoveInput input, StickDir dir, bool aerial)
+        public int FindMove(MoveInput input, StickDir dir, bool aerial, int tier = 0)
         {
             for (int i = 0; i < Moves.Count; i++)
             {
                 var m = Moves[i];
-                if (m.Input == input && m.Aerial == aerial && m.Direction == dir) return i;
+                if (m.Input == input && m.Aerial == aerial && m.Direction == dir && m.MinTier <= tier) return i;
             }
             if (dir == StickDir.Neutral) return -1;
             for (int i = 0; i < Moves.Count; i++)
             {
                 var m = Moves[i];
-                if (m.Input == input && m.Aerial == aerial && m.Direction == StickDir.Neutral) return i;
+                if (m.Input == input && m.Aerial == aerial && m.Direction == StickDir.Neutral && m.MinTier <= tier) return i;
             }
             return -1;
         }
+
+        public int ToolLeftIndex { get; private set; } = -1;
+        public int ToolRightIndex { get; private set; } = -1;
 
         public int FindMoveByName(string name)
         {
@@ -89,6 +101,10 @@ namespace Reforged.Sim
                 if (assists[i] < 0) throw new InvalidOperationException(Name + ": unknown assist move " + AssistMoves[i]);
             }
             AssistMoveIndices = assists;
+            ToolLeftIndex = string.IsNullOrEmpty(ToolLeftMove) ? -1 : FindMoveByName(ToolLeftMove);
+            ToolRightIndex = string.IsNullOrEmpty(ToolRightMove) ? -1 : FindMoveByName(ToolRightMove);
+            if ((ToolLeftIndex < 0 && !string.IsNullOrEmpty(ToolLeftMove)) || (ToolRightIndex < 0 && !string.IsNullOrEmpty(ToolRightMove)))
+                throw new InvalidOperationException(Name + ": unknown D-pad tool move");
         }
     }
 

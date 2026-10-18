@@ -93,3 +93,92 @@ Assist callouts: LT = Gun Kata Burst, LT+→ = Helicarrier Strike, LT+↓ = Flas
 | Gatling Sweep | ↓+B | Special | 10 | 24 | 12 | 46 | 6×12 | 1 | +8 |  |
 
 Assist callouts: LT = Shoulder Cannon, LT+→ = Missile Barrage, LT+↓ = Gatling Sweep
+
+## Hulk
+
+| Move | Input | Tier | Startup | Active | Recovery | Total | Damage | Juggle | Gauge | Flags |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Hammer Fist | X | Light | 6 | 3 | 12 | 21 | 45 | 2 | +8 |  |
+| Backhand | X | Light | 7 | 3 | 14 | 24 | 50 | 2 | +8 |  |
+| Double Axe Handle | X | Light | 10 | 4 | 22 | 36 | 85 | 4 | +8 | GroundBounce |
+| Gamma Haymaker | Y | Heavy | 14 | 4 | 22 | 40 | 120 | 5 | +14 | WallBounce |
+| Hulk Uppercut | ↑+Y | Heavy | 12 | 4 | 24 | 40 | 100 | 6 | +8 | Launcher, CeilingBounce |
+| Gamma Charge | →+Y | Heavy | 14 | 10 | 20 | 44 | 110 | 5 | +8 | WallBounce, SuperArmor |
+| Stomp | ↓+Y | Heavy | 12 | 4 | 22 | 38 | 90 | 4 | +8 | GroundBounce, OTG |
+| Air Smash | air X | Light | 6 | 4 | 14 | 24 | 55 | 2 | +8 |  |
+| Meteor Drop | air Y | Heavy | 10 | 26 | 12 | 48 | 110 | 4 | +8 | OTG, FloorBreak |
+| Boulder Toss | B | Special | 16 | 1 | 20 | 37 | 90 | 4 | +8 | GroundBounce |
+| Gamma Leap | ↑+B | Special | 8 | 10 | 22 | 40 | 90 | 5 | +8 | Launcher, CeilingBounce, Invulnerable |
+| Thunderclap | ↓+B | Special | 12 | 4 | 20 | 36 | 60 | 4 | +8 | Launcher, LiftDebris |
+| Shoulder Barge | →+B | Special | 10 | 12 | 18 | 40 | 80 | 4 | +8 | WallBounce |
+| Ground Clap | ←+B | Special | 10 | 4 | 18 | 32 | 50 | 3 | +8 | OTG |
+| Gamma Wave | RT+X | HeroSpecial | 14 | 1 | 18 | 33 | 90 | 4 | −100 |  |
+| Smash Flurry | RT+Y | HeroSpecial | 8 | 32 | 20 | 60 | 8×24 | 1 | −100 |  |
+| Earthshaker Leap | RT+A | HeroSpecial | 12 | 24 | 18 | 54 | 140 | 5 | −100 | GroundBounce, FloorBreak |
+| Car Fists | RT+B | HeroSpecial | 12 | 6 | 22 | 40 | 150 | 5 | −100 | WallBounce |
+| Gamma Crush | RT+LT | Super | 20 | 8 | 24 | 52 | 220 | 2 | −200 | Launcher, Invulnerable |
+| World Breaker Smash | L3+R3 | Ultimate | 30 | 10 | 30 | 70 | 380 | 0 | −300 | Launcher, Invulnerable |
+| Gamma Rage | RT+L3+R3 | Ultimate | 24 | 4 | 20 | 48 | 60 | 0 | −300 | Invulnerable |
+| World Breaker Throw | RB | Heavy | 6 | 2 | 26 | 34 | 200 | 5 | +8 | GroundBounce, CeilingBounce, Unblockable |
+| Savage Slam | RB | Heavy | 6 | 2 | 24 | 32 | 150 | 5 | +8 | GroundBounce, Unblockable |
+| Gamma Toss | RB | Heavy | 6 | 2 | 22 | 30 | 100 | 4 | +8 | WallBounce, Unblockable, DirectionalThrow |
+
+Assist callouts: LT = Gamma Charge, LT+→ = Boulder Toss, LT+↓ = Thunderclap
+
+## Vision
+
+| Move | Input | Tier | Startup | Active | Recovery | Total | Damage | Juggle | Gauge | Flags |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Synthezoid Jab | X | Light | 4 | 2 | 10 | 16 | 30 | 2 | +8 |  |
+| Synthezoid Cross | X | Light | 5 | 2 | 12 | 19 | 35 | 2 | +8 |  |
+| Phase Backfist | X | Light | 9 | 5 | 18 | 32 | 60 | 3 | +8 | Invulnerable |
+| Solid Palm | Y | Heavy | 11 | 3 | 18 | 32 | 85 | 4 | +8 | WallBounce |
+| Density Uppercut | ↑+Y | Heavy | 9 | 4 | 22 | 35 | 80 | 6 | +8 | Launcher |
+| Solid Lance | →+Y | Heavy | 12 | 5 | 20 | 37 | 90 | 5 | +8 | WallBounce |
+| Phase Sweep | ↓+Y | Heavy | 9 | 4 | 20 | 33 | 65 | 4 | +8 | OTG |
+| Air Phase Strike | air X | Light | 4 | 3 | 10 | 17 | 30 | 2 | +8 |  |
+| Air Solar Kick | air X | Light | 7 | 3 | 16 | 26 | 50 | 3 | +8 | GroundBounce |
+| Diamond Dive | air Y | Heavy | 9 | 22 | 10 | 41 | 80 | 4 | +8 | OTG |
+| Mind Stone Beam | B | Special | 12 | 16 | 18 | 46 | 4×18 | 1 | +8 |  |
+| Ascension | ↑+B | Special | 7 | 8 | 22 | 37 | 80 | 5 | +8 | Launcher, CeilingBounce, Invulnerable |
+| Phase Drop | ↓+B | Special | 16 | 4 | 20 | 40 | 70 | 5 | +8 | Launcher, Invulnerable, Unblockable |
+| Intangible Rush | →+B | Special | 8 | 10 | 16 | 34 | 65 | 3 | +8 | Invulnerable |
+| Solar Lances | RT+X | HeroSpecial | 10 | 1 | 16 | 27 | 50 | 3 | −100 |  |
+| Diamond Hammer | RT+Y | HeroSpecial | 14 | 4 | 22 | 40 | 140 | 5 | −100 | GroundBounce, SuperArmor |
+| Phantom Flight | RT+A | HeroSpecial | 6 | 18 | 14 | 38 | 70 | 4 | −100 | Invulnerable |
+| Mind Stone Pulse | RT+B | HeroSpecial | 14 | 6 | 18 | 38 | 30 | 3 | −100 |  |
+| Synthezoid Overdrive | RT+LT | Super | 18 | 30 | 20 | 68 | 8×30 | 1 | −200 | Invulnerable |
+| Mind Stone Solar Beam | L3+R3 | Ultimate | 30 | 45 | 30 | 105 | 10×42 | 0 | −300 | Invulnerable |
+| Phase Field | RT+L3+R3 | Ultimate | 24 | 6 | 20 | 50 | 40 | 0 | −300 | Invulnerable, Unblockable |
+| Density Throw | RB | Heavy | 5 | 2 | 20 | 27 | 90 | 4 | +8 | GroundBounce, Unblockable, DirectionalThrow |
+
+Assist callouts: LT = Mind Stone Beam, LT+→ = Intangible Rush, LT+↓ = Ascension
+
+## Ant-Man
+
+| Move | Input | Tier | Startup | Active | Recovery | Total | Damage | Juggle | Gauge | Flags |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Quick Jab | X | Light | 3 | 2 | 9 | 14 | 26 | 2 | +8 |  |
+| Quick Hook | X | Light | 4 | 2 | 11 | 17 | 30 | 2 | +8 |  |
+| Shrink Dash Punch | X | Light | 7 | 5 | 16 | 28 | 55 | 3 | +8 |  |
+| Pym Haymaker | Y | Heavy | 10 | 3 | 18 | 31 | 80 | 4 | +8 |  |
+| Growth Spurt | ↑+Y | Heavy | 8 | 5 | 22 | 35 | 85 | 6 | +8 | Launcher, CeilingBounce |
+| Giant Shoulder | →+Y | Heavy | 12 | 6 | 20 | 38 | 90 | 5 | +8 | WallBounce |
+| Ant Sweep | ↓+Y | Heavy | 8 | 4 | 20 | 32 | 60 | 4 | +8 | OTG |
+| Ant Kick | air X | Light | 4 | 3 | 10 | 17 | 28 | 2 | +8 |  |
+| Pinball Kick | air X | Light | 6 | 4 | 14 | 24 | 45 | 3 | +8 | GroundBounce |
+| Size Drop | air Y | Heavy | 9 | 22 | 12 | 43 | 75 | 4 | +8 | OTG, FloorBreak |
+| Red Disc | B | Special | 9 | 1 | 16 | 26 | 40 | 3 | +8 |  |
+| Blue Disc | ↓+B | Special | 11 | 1 | 18 | 30 | 55 | 4 | +8 | WallBounce |
+| Flying Ant Mount | ↑+B | Special | 6 | 14 | 18 | 38 | 60 | 4 | +8 | Launcher, CeilingBounce, Invulnerable |
+| Ant Swarm | →+B | Special | 10 | 24 | 16 | 50 | 6×14 | 1 | +8 |  |
+| Pinball | RT+X | HeroSpecial | 6 | 24 | 16 | 46 | 6×22 | 1 | −100 |  |
+| Giant Stomp | RT+Y | HeroSpecial | 16 | 6 | 24 | 46 | 130 | 5 | −100 | GroundBounce, OTG |
+| Quantum Dive | RT+A | HeroSpecial | 18 | 6 | 18 | 42 | 110 | 5 | −100 | Launcher, Invulnerable, Unblockable |
+| Colony Call | RT+B | HeroSpecial | 14 | 30 | 16 | 60 | 8×16 | 1 | −100 |  |
+| Giant-Man Rampage | RT+LT | Super | 20 | 24 | 24 | 68 | 4×50 | 1 | −200 | Invulnerable |
+| Giant-Man | L3+R3 | Ultimate | 30 | 10 | 30 | 70 | 360 | 0 | −300 | Launcher, Invulnerable |
+| Quantum Tunnel | RT+L3+R3 | Ultimate | 24 | 4 | 20 | 48 | 30 | 0 | −300 | Invulnerable |
+| Pym Toss | RB | Heavy | 5 | 2 | 20 | 27 | 80 | 4 | +8 | WallBounce, Unblockable, DirectionalThrow |
+
+Assist callouts: LT = Ant Swarm, LT+→ = Red Disc, LT+↓ = Growth Spurt

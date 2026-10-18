@@ -32,6 +32,16 @@ namespace Reforged.Sim
         Unblockable = 1 << 7,      // throws; also strips enemy armor
         FloorBreak = 1 << 8,       // landing during this move damages a breakable floor
         DirectionalThrow = 1 << 9, // throw direction follows the stick
+        LiftDebris = 1 << 10,      // first active frame pops nearby debris into the air to be batted (Hulk's Thunderclap)
+    }
+
+    /// <summary>One-off effects a move applies through its hero's mechanic.</summary>
+    public enum MechanicEffect : byte
+    {
+        None,
+        GammaRage,      // Hulk: World Breaker tier for a while
+        PhaseField,     // Vision: allies intangible for a while
+        QuantumTunnel,  // Ant-Man: shrinks every enemy for a while
     }
 
     public sealed class ProjectileSpec
@@ -78,6 +88,12 @@ namespace Reforged.Sim
         public ProjectileSpec Projectile;
         /// <summary>Frames of team buff granted on the first active frame (support ultimates).</summary>
         public int TeamBuffFrames;
+        /// <summary>Heat added when the move starts (Heat heroes). Overheated heroes can't use heat moves.</summary>
+        public int HeatCost;
+        /// <summary>Mechanic tier needed (Rage heroes). List higher-tier variants of a command first.</summary>
+        public int MinTier;
+        public MechanicEffect Effect;
+        public int EffectFrames;
 
         public int Index { get; internal set; }
         public int ChainNextIndex { get; internal set; } = -1;
